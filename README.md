@@ -16,6 +16,8 @@ Requires: make and g++
 ## How To Build
 
 ```bash
+$ git clone https://github.com/techniman/cpp-cli-rpg.git
+$ cd cpp-cli-rpg
 $ cd src
 $ make
 $ ../bin/cpp-cli-rpg
