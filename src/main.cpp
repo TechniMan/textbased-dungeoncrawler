@@ -19,6 +19,14 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
+void Write(std::string out) {
+    std::cout << out;
+}
+
+void WriteLine(std::string out) {
+    std::cout << out << std::endl;
+}
+
 enum GAME_STATE
 {
     GAME_STATE_TITLE = 0,
@@ -152,33 +160,29 @@ class EnemyState : public Creature {
     private:
 
     public:
-        EnemyState() : Creature("") { }
-
-        EnemyState(std::string name) : Creature(name) {
-
-        }
-
         unsigned int goldWorth = 5;
         unsigned int expWorth = 10;
-
         unsigned int Attack = 3;
+
+        EnemyState() : Creature("") { }
+
+        EnemyState(std::string name, unsigned int level) : Creature(name) {
+            goldWorth = 1 + (level * 2);
+            expWorth = 1 + (level * 3);
+            Attack = 1 + (level * 2);
+        }
 };
 EnemyState g_enemyState;
+unsigned int g_travelDepth = 0;
 
 void InitialiseCombat() {
-    g_enemyState = EnemyState("Enemy");
+    g_travelDepth++;
+    g_enemyState = EnemyState("Enemy", g_travelDepth);
 }
 
 void EndCombat() {
     g_playerState.Reward(g_enemyState.goldWorth, g_enemyState.expWorth);
-}
-
-void Write(std::string out) {
-    std::cout << out;
-}
-
-void WriteLine(std::string out) {
-    std::cout << out << std::endl;
+    WriteLine("You have been rewarded " + std::to_string(g_enemyState.goldWorth) + "g and " + std::to_string(g_enemyState.expWorth) + "exp! Spend them in town!");
 }
 
 void WriteHelp() {
@@ -209,6 +213,7 @@ void WriteHelp() {
             WriteLine("attack: hit the damn thig with your hitty stick");
             WriteLine("cast <spell>: cast <spell> at the target");
             WriteLine("consume <item>: verb a consumable item");
+            WriteLine("status: show your & your opponent's health");
             WriteLine("run: attempt to flee from your opponent");
             break;
 
@@ -259,7 +264,7 @@ int main(int argc, char ** args) {
         }
 
         // help
-        if (command == "help") {
+        else if (command == "help") {
             WriteHelp();
         }
 
@@ -314,12 +319,13 @@ int main(int argc, char ** args) {
                     if (g_playerState.HealthPercentage() >= 0.2f) {
                         g_gameState = GAME_STATE_COMBAT;
                         WriteLine("You venture out into the wilderness.");
+                        InitialiseCombat();
                     }
                     else {
                         WriteLine("You should think about resting up, first! HP: " + g_playerState.CurrentHealth());
                     }
                 }
-                else if (command != "help") {
+                else if (command != "help" && command != "exit" && command != "quit") {
                     WriteCommandNotFound(command);
                 }
                 break;
@@ -337,8 +343,17 @@ int main(int argc, char ** args) {
                     // if enemy is defeated, ask to carry on in the wilderness or return home
                     if (g_enemyState.CurrentHP() == 0) {
                         WriteLine("WIP: You defeated " + g_enemyState.Name() + "! Now you return to town.");
+                        EndCombat();
                         takenTurn = false;
-                        g_gameState = GAME_STATE_TOWN;
+                        Write("Would you like to continue? Y/n > ");
+                        if (std::getline(std::cin, lineIn)) {
+                            if (lineIn == "Y" || lineIn == "yes") {
+                                InitialiseCombat();
+                            }
+                            else {
+                                g_gameState = GAME_STATE_TOWN;
+                            }
+                        }
                     }
                 }
                 else if (command == "cast") {
@@ -357,9 +372,12 @@ int main(int argc, char ** args) {
                     // else report failure
                     WriteLine("Not yet implemented!");
                 }
+                else if (command == "status") {
+                    WriteLine(g_playerState.Name() + "'s HP: " + g_playerState.CurrentHealth() + " and " + g_enemyState.Name() + "'s HP: " + g_enemyState.CurrentHealth());
+                }
                 else if (command == "run") {
                     // make a random check
-                    // roll under a certain chance, successfully run away
+                    // roll under a certain chance to successfully run away
                     WriteLine("for now, this is 100% successful and safe because development.");
                     g_gameState = GAME_STATE_TOWN;
                     // else, just end turn
