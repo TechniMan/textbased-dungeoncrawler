@@ -1,0 +1,1 @@
+I'd prefer no contributions just yet as I am still working on the basics, and kind of enjoying it! Once it's more fleshed out (and the code is way better) then I'll be more open to contributions, but currently there's just no point. Soon!
