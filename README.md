@@ -12,6 +12,7 @@ GNU GPL v3. I feel like this is a simple little project that would be more usefu
 ## Dependencies
 
 Requires: make and g++
+Tested on: Ubuntu 18.04 x64 (on a weedy old i3-3217U laptop).
 
 ## How To Build
 
