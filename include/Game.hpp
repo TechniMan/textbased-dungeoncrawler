@@ -1,16 +1,18 @@
 #ifndef _GAME_HPP_
 #define _GAME_HPP_
 
+#include "pcg-random/pcg_random.hpp"
+#include "pcg-random/pcg_extras.hpp"
+
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Logger.hpp"
 #include "GAMESTATE.hpp"
 
-// Bit of a blob class, but we remove some of its functionality
-//  that makes sense to take out into other classes.
 class Game {
     private:
         Logger * m_logger = nullptr;
+        pcg32 m_rng;
 
         unsigned int m_gameState = GAMESTATE_MENU;
         unsigned int m_adventureDepth = 0;

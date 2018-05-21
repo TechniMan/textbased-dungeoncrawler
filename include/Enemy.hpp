@@ -9,13 +9,12 @@ class Enemy : public Creature {
         unsigned int m_exp;
 
     public:
-        Enemy(std::string name, unsigned int maxHp);
+        Enemy(std::string name, int str, int dex, int con, int gold, int exp);
         ~Enemy();
 
         unsigned int GoldWorth() const;
         unsigned int ExpWorth() const;
 
-        int AttackDamage() const override;
         unsigned int Defense() const override;
 };
 
