@@ -39,19 +39,21 @@ void Logger::WriteHelp(unsigned int gameState) const {
         case GAMESTATE_TOWN:
             WriteLine("rest: restore your health, heal your wounds, and save the game");
             WriteLine("travel: go out in search of adventure and danger");
+            WriteLine("status: show info about you");
+            // learn/levelup/skillup: attempt to spend exp
+            WriteLine("levelup <skillname>: attempt to increase your <skillname> skill by spending exp");
             // buy <item>: attempt to buy <item>
             // sell <item>: sell <item>
             // don <equipment>: attempt to don <equipment>
             // doff <equipment>: attempt to doff <equipment>
-            // learn/levelup/skillup: attempt to spend exp
             // quit: quit to the menu (alias: exit)
             break;
 
         case GAMESTATE_COMBAT:
-            WriteLine("attack: hit the damn thig with your hitty stick");
-            WriteLine("cast <spell>: cast <spell> at the target");
-            WriteLine("consume <item>: verb a consumable item");
-            WriteLine("status: show your & your opponent's health");
+            WriteLine("attack: hit the damn thig with your pointy stick");
+            //WriteLine("cast <spell>: cast <spell> at the target");
+            //WriteLine("consume <item>: verb a consumable item");
+            WriteLine("status: show your & your opponent's info");
             WriteLine("run: attempt to flee from your opponent");
             break;
 
@@ -59,6 +61,6 @@ void Logger::WriteHelp(unsigned int gameState) const {
             break;
     }
 
-    WriteLine("exit: quit the game. currently works everywhere, todo: improve this");
     WriteLine("help: this handy help message :)");
+    WriteLine("exit: quit the game");
 }

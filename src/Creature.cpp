@@ -1,20 +1,21 @@
 #include "../include/Creature.hpp"
-#include <math.h>
+#include <cmath>
 
-Creature::Creature(std::string name, unsigned int maxHp)
-    : m_name(name), m_maxHp(maxHp), m_currentHp(maxHp) {
-
+Creature::Creature(std::string name, unsigned int baseHp)
+    : m_name(name), m_baseHp(baseHp) {
+    
 }
 
 Creature::~Creature() {
 
 }
 
-int Creature::AbilityModifier(unsigned int abilityScore) const {
-    if (abilityScore >= 10) {
-        return (int)floor((abilityScore - 10) * 0.5f);
-    }
-    return (int)ceil((-10 + abilityScore) * 0.5f);
+int Creature::AbilityModifier(int abilityScore) const {
+    return (int)floorf(abilityScore * 0.5f);
+}
+
+unsigned int Creature::GetMaximumHp() const {
+    return m_baseHp + AbilityModifier(m_constitution);
 }
 
 std::string Creature::GetName() const {
@@ -36,28 +37,37 @@ bool Creature::Damage(unsigned int damageAmount) {
 
 void Creature::Heal(unsigned int healAmount) {
     if (healAmount == 0) {
-        m_currentHp = m_maxHp;
+        m_currentHp = GetMaximumHp();
     }
     else {
         m_currentHp += healAmount;
-        if (m_currentHp > m_maxHp) {
-            m_currentHp = m_maxHp;
+        if (m_currentHp > GetMaximumHp()) {
+            m_currentHp = GetMaximumHp();
         }
     }
 }
 
 float Creature::HPPercentage() const {
-    return (float)m_currentHp / (float)m_maxHp;
+    return (float)m_currentHp / (float)GetMaximumHp();
 }
 
-std::string Creature::CurrentHealth() const {
-    return std::to_string(m_currentHp) + " / " + std::to_string(m_maxHp);
+int Creature::AttackBonus() const {
+    return AbilityModifier(m_dexterity);
 }
 
 int Creature::AttackDamage() const {
-    return AbilityModifier(m_strength);
+    return Max(AbilityModifier(m_strength), 0);
 }
 
 unsigned int Creature::Defense() const {
-    return 10;
+    return 10 + AbilityModifier(m_dexterity);
+}
+
+std::string Creature::CurrentHealth() const {
+    return std::to_string(m_currentHp) + " / " + std::to_string(GetMaximumHp());
+}
+
+// return "{name} - Health: {current} / {max} Str: {str} Dex: {dex} Con: {con}"
+std::string Creature::ToString() const {
+    return m_name + " - base:" + std::to_string(m_baseHp) + " Health: " + CurrentHealth() + " Str:" + std::to_string(m_strength) + "(" + std::to_string(AbilityModifier(m_strength)) + ") Dex:" + std::to_string(m_dexterity) + "(" + std::to_string(AbilityModifier(m_dexterity)) + ") Con:" + std::to_string(m_constitution) + "(" + std::to_string(AbilityModifier(m_constitution)) + ")";
 }
