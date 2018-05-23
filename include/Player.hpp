@@ -26,6 +26,9 @@ class Player : public Creature {
         unsigned int m_exp;
 
     public:
+        static bool Load(std::string filename, Player & player);
+        bool Save(std::string filename);
+
         Player(std::string name);
         ~Player();
 

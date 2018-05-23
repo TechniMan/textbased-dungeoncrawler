@@ -22,7 +22,8 @@ $ git clone https://github.com/techniman/cpp-cli-rpg.git
 $ cd cpp-cli-rpg
 $ cd src
 $ make
-$ ../bin/cpp-cli-rpg
+$ cd ..
+$ bin/cpp-cli-rpg.exec
 ```
 
 ## Contributing

@@ -30,7 +30,7 @@ int main(int argc, char ** args) {
     logger->WriteLine("C++-based command-line RPG, by Will Thomas.");
     logger->WriteLine("Still in-development, so if anything breaks, please let me know! Cheers, and enjoy!");
     logger->WriteLine("");
-    logger->WriteLine("Menu: From here, you can start a {new} game or {exit}! At any time, {help} will tell you the available commands.");
+    logger->WriteLine("Menu: From here, you can start a {new} game, {load} another character, or {exit}! At any time, {help} will tell you the available commands.");
 
     // begin game loop
     std::string lineIn;

@@ -1,5 +1,7 @@
 #include "../include/Game.hpp"
 
+std::string GAME_SAVES_DIRECTORY = "saves/";
+
 Game::Game() {
 	m_logger = new Logger();
 	m_rng = pcg32();
@@ -62,7 +64,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 					m_player->Heal(0);
 					m_gameState = GAMESTATE_TOWN;
 					m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
-					m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortunes. And of course you can {exit}.");
+					m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
 				}
 				else {
 					m_logger->WriteLine("Please specify a name for the brave new hero!");
@@ -70,7 +72,16 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			}
 			else if (command == "load") {
 				if (fullArg.length() > 0) {
-					m_logger->WriteLine("Not yet implemented!");
+					Player * loadPlayer = new Player(fullArg);
+					if (Player::Load(GAME_SAVES_DIRECTORY + fullArg + ".sav", *loadPlayer)) {
+						m_player = loadPlayer;
+						m_gameState = GAMESTATE_TOWN;
+						m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
+						m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
+					}
+					else {
+						m_logger->WriteLine("Unfortunately " + fullArg + " couldn't be loaded. Did you spell it right?");
+					}
 				}
 				else {
 					m_logger->WriteLine("Please specify a name for the hero you wish to awaken!");
@@ -92,7 +103,20 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				// if player is super injured and also unable to pay, then they are stuck forever to die on the streets. Whoops
 				m_player->Heal(0);
 				m_logger->WriteLine(m_player->GetName() + "'s health replenished through rest! HP: " + m_player->CurrentHealth());
-				m_logger->WriteLine("Saving is not yet implemented!");
+				m_logger->WriteLine("Saving to " + GAME_SAVES_DIRECTORY + m_player->GetName() + ".sav ...");
+				if (m_player->Save(GAME_SAVES_DIRECTORY + m_player->GetName() + ".sav")) {
+					m_logger->WriteLine("Saved " + m_player->GetName() + " to file!");
+				}
+				else {
+					std::string command = "mkdir " + GAME_SAVES_DIRECTORY;
+					system(command.c_str());
+					if (m_player->Save(GAME_SAVES_DIRECTORY + m_player->GetName() + ".sav")) {
+						m_logger->WriteLine("Saved " + m_player->GetName() + " to file!");
+					}
+					else {
+						m_logger->WriteLine("Unfortunately there was an error trying to save.");
+					}
+				}
 			}
 
 			else if (command == "travel") {

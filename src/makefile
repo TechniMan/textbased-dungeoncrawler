@@ -18,7 +18,7 @@ $(ODIR)/%.o: %.cpp $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 cpp-cli-rpg: $(OBJ)
-	$(CC) -g -o ../bin/$@.exec $^ $(CFLAGS) $(LIBS)
+	$(CC) -g -o ../bin/$@.exec $^ $(CFLAGS) $(LIBS) -std=c++11
 
 .PHONY: clean
 
