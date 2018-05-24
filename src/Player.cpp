@@ -20,10 +20,10 @@ bool Player::Load(std::string filename, Player & player) {
     
     // deserialise into {player}
     player.m_baseHp = 10;
-    //player.m_name = jIn["name"];
     player.m_strength = jIn["strength"];
     player.m_dexterity = jIn["dexterity"];
     player.m_constitution = jIn["constitution"];
+    player.m_level = jIn["level"];
     player.m_gold = jIn["gold"];
     player.m_exp = jIn["experience"];
     player.m_currentHp = player.GetMaximumHp();
@@ -34,12 +34,12 @@ bool Player::Load(std::string filename, Player & player) {
 bool Player::Save(std::string filename) {
     // serialise to json
     json player;
-    //player["name"] = m_name;
     player["strength"] = m_strength;
-    player.emplace("dexterity", m_dexterity);
-    player.emplace("constitution", m_constitution);
-    player.emplace("gold", m_gold);
-    player.emplace("experience", m_exp);
+    player["dexterity"] = m_dexterity;
+    player["constitution"] = m_constitution;
+    player["level"] = m_level;
+    player["gold"] = m_gold;
+    player["experience"] = m_exp;
 
     // write to file
     std::ofstream fileOut(filename);
@@ -71,15 +71,21 @@ bool Player::Pay(unsigned int goldCost) {
     return false;
 }
 
+unsigned int Player::LevelUpCost() {
+    // gets gradually more expensive
+    return 10u + pow((double)m_level, 1.1);
+}
+
 bool Player::LevelUp(CREATURE_ABILITIES ability) {
-    if (m_exp >= LEVELUP_COST) {
+    if (m_exp >= LevelUpCost()) {
         switch (ability) {
             case CREATURE_ABILITIES_STRENGTH: m_strength++; break;
             case CREATURE_ABILITIES_DEXTERITY: m_dexterity++; break;
             case CREATURE_ABILITIES_CONSTITUTION: m_constitution++; break;
             default: break;
         }
-        m_exp -= LEVELUP_COST;
+        m_exp -= LevelUpCost();
+        m_level++;
         return true;
     }
     return false;
@@ -100,4 +106,8 @@ int Player::AttackDamage() const {
 
 unsigned int Player::Defense() const {
     return Creature::Defense();
+}
+
+std::string Player::ToString() const {
+    return Creature::ToString() + " | Level: " + std::to_string(m_level) + " | Gold: " + std::to_string(m_gold) + "g | Exp: " + std::to_string(m_exp);
 }

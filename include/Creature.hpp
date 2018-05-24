@@ -57,7 +57,7 @@ class Creature {
         // returns "{current} / {max}"
         std::string CurrentHealth() const;
         // return "{name} - Health: {current} / {max} Str: {str} Dex: {dex} Con: {con}"
-        std::string ToString() const;
+        virtual std::string ToString() const;
 };
 
 #endif // _CREATURE_HPP_

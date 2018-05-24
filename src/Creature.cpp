@@ -11,7 +11,8 @@ Creature::~Creature() {
 }
 
 int Creature::AbilityModifier(int abilityScore) const {
-    return (int)floorf(abilityScore * 0.5f);
+    // diminishing returns: earlier increases are more significant, but later increases are less likely to improve the stat
+    return (int)ceil(pow((double)abilityScore, 0.92));
 }
 
 unsigned int Creature::GetMaximumHp() const {
@@ -69,5 +70,15 @@ std::string Creature::CurrentHealth() const {
 
 // return "{name} - Health: {current} / {max} Str: {str} Dex: {dex} Con: {con}"
 std::string Creature::ToString() const {
-    return m_name + " - base:" + std::to_string(m_baseHp) + " Health: " + CurrentHealth() + " Str:" + std::to_string(m_strength) + "(" + std::to_string(AbilityModifier(m_strength)) + ") Dex:" + std::to_string(m_dexterity) + "(" + std::to_string(AbilityModifier(m_dexterity)) + ") Con:" + std::to_string(m_constitution) + "(" + std::to_string(AbilityModifier(m_constitution)) + ")";
+    int strMod = AbilityModifier(m_strength);
+    std::string strModStr = std::to_string(strMod);
+    if (strMod > 0) { strModStr = "+" + strModStr; }
+    int dexMod = AbilityModifier(m_dexterity);
+    std::string dexModStr = std::to_string(dexMod);
+    if (dexMod > 0) { dexModStr = "+" + dexModStr; }
+    int conMod = AbilityModifier(m_constitution);
+    std::string conModStr = std::to_string(conMod);
+    if (conMod > 0) { conModStr = "+" + conModStr; }
+
+    return m_name + " - Health: " + CurrentHealth() + " | Str:" + std::to_string(m_strength) + "(" + strModStr + ") | Dex:" + std::to_string(m_dexterity) + "(" + dexModStr + ") | Con:" + std::to_string(m_constitution) + "(" + conModStr + ")";
 }

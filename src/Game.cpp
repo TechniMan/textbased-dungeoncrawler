@@ -15,10 +15,11 @@ Game::~Game() {
 
 void Game::InitialiseCombat() {
 	m_adventureDepth++;
-	m_enemy = new Enemy("kobold", (int)m_adventureDepth - 2, 2 + m_adventureDepth, 0 + m_adventureDepth, 2 * m_adventureDepth, 2 * m_adventureDepth);
+	m_enemy = new Enemy("kobold", m_adventureDepth, m_adventureDepth, m_adventureDepth, 2 * m_adventureDepth, 3 * m_adventureDepth);
 	m_enemy->Heal(0);
 
 	m_logger->WriteLine("You've come across a " + m_enemy->GetName() + "!");
+	m_logger->WriteLine("You could try to {attack} it, check your and its {status}, or try and {run} away back to safety!");
 }
 
 void Game::EndCombat() {
@@ -133,6 +134,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			else if (command == "status") {
 				m_logger->WriteLine(m_player->ToString());
+				m_logger->WriteLine("The next level up will cost " + std::to_string(m_player->LevelUpCost()) + "exp.");
 
 				if (mainArg == "help") {
 					m_logger->WriteLine("str: affects your attack damage");
@@ -147,7 +149,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("Your strength score has increased!");
 					}
 					else {
-						m_logger->WriteLine("You need at least " + std::to_string(LEVELUP_COST) + "exp to level up an ability.");
+						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
 					}
 				}
 				else if (mainArg == "dex" || mainArg == "dexterity") {
@@ -155,7 +157,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("Your dexterity score has increased!");
 					}
 					else {
-						m_logger->WriteLine("You need at least " + std::to_string(LEVELUP_COST) + "exp to level up an ability.");
+						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
 					}
 				}
 				else if (mainArg == "con" || mainArg == "constitution") {
@@ -163,7 +165,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("Your constitution score has increased!");
 					}
 					else {
-						m_logger->WriteLine("You need at least " + std::to_string(LEVELUP_COST) + "exp to level up an ability.");
+						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
 					}
 				}
 				else {

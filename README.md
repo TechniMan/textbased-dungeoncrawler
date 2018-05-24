@@ -7,13 +7,11 @@ Basically one evening I got home from work with a cool idea for a very simple ga
 
 ## License
 
-GNU GPL v3. I feel like this is a simple little project that would be more useful being kept open and would be less useful as a basis for a large commercial project, so the GPL seems to fit well for this case.
+GNU GPL v3. I feel like this is a simple little project that would be more useful being kept open and would be less useful as a basis for a large commercial project.
 
 ## Dependencies
 
-Requires: make and g++
-
-Tested on: Ubuntu 18.04 x64 (on a weedy old i3-3217U laptop).
+Requires: make, g++
 
 ## How To Build
 
@@ -25,7 +23,3 @@ $ make
 $ cd ..
 $ bin/cpp-cli-rpg.exec
 ```
-
-## Contributing
-
-I'd prefer no contributions just yet as I am still working on the basics, and kind of enjoying it! Once it's more fleshed out (and the code is better organised) then I'll be more receptive to contributions, but currently there's just no point. Soon!
