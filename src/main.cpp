@@ -36,18 +36,20 @@ int main(int argc, char ** args) {
     std::string lineIn;
     logger->Write("\n> ");
     while (std::getline(std::cin, lineIn)) {
-        std::vector<std::string> input = split(lineIn, ' ');
-        std::string command = input.at(0);
-        std::string mainArg;
-        std::string fullArg;
-        if (input.size() > 1) {
-            mainArg = input.at(1);
-            fullArg = lineIn.substr(command.length() + 1, std::string::npos);
-        }
-        
-        // if ProcessCommand returns false, then quit the game
-        if (!game->ProcessCommand(command, mainArg, fullArg)) {
-            break;
+        if (lineIn.size() > 0) {
+            std::vector<std::string> input = split(lineIn, ' ');
+            std::string command = input.at(0);
+            std::string mainArg;
+            std::string fullArg;
+            if (input.size() > 1) {
+                mainArg = input.at(1);
+                fullArg = lineIn.substr(command.length() + 1, std::string::npos);
+            }
+            
+            // if ProcessCommand returns false, then quit the game
+            if (!game->ProcessCommand(command, mainArg, fullArg)) {
+                break;
+            }
         }
 
         // begin the next line to prompt user input
