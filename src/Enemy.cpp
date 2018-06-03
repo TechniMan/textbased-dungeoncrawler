@@ -1,7 +1,7 @@
 #include "../include/Enemy.hpp"
 
-Enemy::Enemy(std::string name, int str, int dex, int con, int gold, int exp)
-    : Creature(name, 10) {
+Enemy::Enemy(std::string& name, Weapon& weapon, int str, int dex, int con, int gold, int exp)
+    : Creature(name, 10, weapon) {
     m_strength = str;
     m_dexterity = dex;
     m_constitution = con;
@@ -19,8 +19,4 @@ unsigned int Enemy::GoldWorth() const {
 
 unsigned int Enemy::ExpWorth() const {
     return m_exp;
-}
-
-unsigned int Enemy::Defense() const {
-    return 10 + AbilityModifier(m_dexterity);
 }

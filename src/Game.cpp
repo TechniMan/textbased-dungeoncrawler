@@ -1,5 +1,7 @@
 #include "../include/Game.hpp"
 
+#include <cmath>
+
 std::string GAME_SAVES_DIRECTORY = "saves/";
 
 Game::Game() {
@@ -15,7 +17,9 @@ Game::~Game() {
 
 void Game::InitialiseCombat() {
 	m_adventureDepth++;
-	m_enemy = new Enemy("kobold", m_adventureDepth, m_adventureDepth, m_adventureDepth, 2 * m_adventureDepth, 3 * m_adventureDepth);
+	unsigned int a = (unsigned int)(floorf((float)m_adventureDepth * 0.7f));
+	std::string kobold("kobold");
+	m_enemy = new Enemy(kobold, AvailableWeapons.at("Dagger"), a, a, a, 2 * m_adventureDepth, 3 * m_adventureDepth);
 	m_enemy->Heal(0);
 
 	m_logger->WriteLine("You've come across a " + m_enemy->GetName() + "!");
@@ -118,10 +122,13 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("Unfortunately there was an error trying to save.");
 					}
 				}
+				if (/*m_player->GetExp() > m_player->LevelUpCost()*/false) {
+					m_logger->WriteLine("It looks like you have enough exp to {levelup}!");
+				}
 			}
 
 			else if (command == "travel") {
-				if (m_player->HPPercentage() >= 0.2f) {
+				if (m_player->HPPercentage() >= 0.5f) {
 					m_gameState = GAMESTATE_COMBAT;
 					m_adventureDepth = 0; // start at 0; it is incremented by InitCombat()
 					m_logger->WriteLine("You venture out into the wilderness.");
@@ -169,7 +176,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 					}
 				}
 				else {
-					m_logger->WriteLine("I'm afraid you don't have a '" + mainArg + "' skill. Try:");
+					m_logger->WriteLine("I'm afraid you don't have a '" + mainArg + "' ability. Try:");
 					m_logger->WriteLine("str: affects your attack damage");
 					m_logger->WriteLine("dex: affects your attack hit chance and dodge chance");
 					m_logger->WriteLine("con: affects your maximum hit points");
@@ -190,8 +197,9 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
 				unsigned int attackRoll = roll + m_player->AttackBonus();
 				if (attackRoll >= m_enemy->Defense()) {
-					m_enemy->Damage(m_player->AttackDamage());
-					m_logger->WriteLine("You hit and dealt " + std::to_string(m_player->AttackDamage()) + " damage to the " + m_enemy->GetName() + ".");
+					int dmg = 0;
+					m_enemy->Damage(dmg = m_player->AttackDamage(m_rng));
+					m_logger->WriteLine("You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + ".");
 				}
 				else {
 					m_logger->WriteLine("Your attack missed!");
@@ -265,8 +273,9 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
 				unsigned int attackRoll = roll + m_enemy->AttackBonus();
 				if (attackRoll >= m_player->Defense()) {
-					m_player->Damage(m_enemy->AttackDamage());
-					m_logger->WriteLine("The " + m_enemy->GetName() + " hit you for " + std::to_string(m_enemy->AttackDamage()) + " damage!");
+					int dmg = 0;
+					m_player->Damage(dmg = m_enemy->AttackDamage(m_rng));
+					m_logger->WriteLine("The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!");
 				}
 				else {
 					m_logger->WriteLine("The " + m_enemy->GetName() + "\'s attack missed you.");

@@ -1,8 +1,13 @@
 #include "../include/Creature.hpp"
 #include <cmath>
 
-Creature::Creature(std::string name, unsigned int baseHp)
-    : m_name(name), m_baseHp(baseHp) {
+Creature::Creature(std::string& name, unsigned int baseHp, Weapon& weapon)
+    : m_name(name), m_baseHp(baseHp), m_weapon(weapon) {
+    
+}
+
+Creature::Creature(Creature& creature)
+    : m_name(creature.m_name), m_baseHp(creature.m_baseHp), m_weapon(creature.m_weapon) {
     
 }
 
@@ -56,8 +61,8 @@ int Creature::AttackBonus() const {
     return AbilityModifier(m_dexterity);
 }
 
-int Creature::AttackDamage() const {
-    return Max(AbilityModifier(m_strength), 0);
+int Creature::AttackDamage(pcg32 rng) const {
+    return Max(m_weapon.GetDamage(rng) + AbilityModifier(m_strength), 0);
 }
 
 unsigned int Creature::Defense() const {
@@ -80,5 +85,5 @@ std::string Creature::ToString() const {
     std::string conModStr = std::to_string(conMod);
     if (conMod > 0) { conModStr = "+" + conModStr; }
 
-    return m_name + " - Health: " + CurrentHealth() + " | Str:" + std::to_string(m_strength) + "(" + strModStr + ") | Dex:" + std::to_string(m_dexterity) + "(" + dexModStr + ") | Con:" + std::to_string(m_constitution) + "(" + conModStr + ")";
+    return m_name + " - Health: " + CurrentHealth() + " | Str:" + std::to_string(m_strength) + "(" + strModStr + ") | Dex:" + std::to_string(m_dexterity) + "(" + dexModStr + ") | Con:" + std::to_string(m_constitution) + "(" + conModStr + ")" + " | Weapon: " + m_weapon.GetName();
 }

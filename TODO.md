@@ -5,9 +5,10 @@
 * add stats and levelling
 * add random generator
 * improve combat: chance to miss
-## Features
 * !saving and loading characters!
-* add equipment (weapons, armour)
+* add weapons
+## Features
+* add armour
 * add items (health potions, )
 * add magic (spells)
 * add a shop in town (health potions, magic scrolls, equipment upgrades)
@@ -20,3 +21,4 @@
 * also try to improve state transitions (e.g. when the state changes to town from wilderness, show the same line about "you've come back to town" or whenever you go to the menu, always show "this is the menu" or something)
 * add a system to read monsters from file, for easy configurability by eager players
 * add networking, maybe (need to think about how this would work)
+* move saving & loading out of the Player class to a separate system, maybe?

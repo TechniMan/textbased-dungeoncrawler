@@ -10,19 +10,16 @@ class Player : public Creature {
         unsigned int m_exp;
 
     public:
-        static bool Load(std::string filename, Player & player);
+        static bool Load(std::string filename, Player& player);
         bool Save(std::string filename);
 
-        Player(std::string name);
+        Player(std::string& name);
         ~Player();
 
         bool Pay(unsigned int goldCost);
         unsigned int LevelUpCost();
         bool LevelUp(CREATURE_ABILITIES ability);
         void Reward(unsigned int gold, unsigned int experience);
-        int AttackBonus() const override;
-        int AttackDamage() const override;
-        unsigned int Defense() const override;
         virtual std::string ToString() const override;
 };
 

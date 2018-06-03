@@ -4,7 +4,7 @@
 #include "../include/nlohmann/json.hpp"
 using json = nlohmann::json;
 
-bool Player::Load(std::string filename, Player & player) {
+bool Player::Load(std::string filename, Player& player) {
     // read from file
     std::ifstream fileIn(filename);
     if (!fileIn) {
@@ -27,36 +27,38 @@ bool Player::Load(std::string filename, Player & player) {
     player.m_gold = jIn["gold"];
     player.m_exp = jIn["experience"];
     player.m_currentHp = player.GetMaximumHp();
+    player.m_weapon = AvailableWeapons.at(jIn["weapon"]);
     
     return true;
 }
 
 bool Player::Save(std::string filename) {
     // serialise to json
-    json player;
-    player["strength"] = m_strength;
-    player["dexterity"] = m_dexterity;
-    player["constitution"] = m_constitution;
-    player["level"] = m_level;
-    player["gold"] = m_gold;
-    player["experience"] = m_exp;
+    json jOut;
+    jOut["strength"] = m_strength;
+    jOut["dexterity"] = m_dexterity;
+    jOut["constitution"] = m_constitution;
+    jOut["level"] = m_level;
+    jOut["gold"] = m_gold;
+    jOut["experience"] = m_exp;
+    jOut["weapon"] = m_weapon.GetName();
 
     // write to file
     std::ofstream fileOut(filename);
     if (!fileOut) {
         return false;
     }
-    fileOut << std::setw(2) << player << std::endl;
+    fileOut << std::setw(2) << jOut << std::endl;
     fileOut.close();
 
     return true;
 }
 
-Player::Player(std::string name)
-    : Creature(name, 10) {
-    m_strength = 2;
-    m_dexterity = 2;
-    m_constitution = 2;
+Player::Player(std::string& name)
+    : Creature(name, 10, AvailableWeapons.at("Dagger")) {
+    m_strength = 0;
+    m_dexterity = 0;
+    m_constitution = 0;
 }
 
 Player::~Player() {
@@ -96,18 +98,6 @@ void Player::Reward(unsigned int gold, unsigned int exp) {
     m_exp += exp;
 }
 
-int Player::AttackBonus() const {
-    return Creature::AttackBonus();
-}
-
-int Player::AttackDamage() const {
-    return Max(AbilityModifier(m_strength) + 4, 0);
-}
-
-unsigned int Player::Defense() const {
-    return Creature::Defense();
-}
-
 std::string Player::ToString() const {
-    return Creature::ToString() + " | Level: " + std::to_string(m_level) + " | Gold: " + std::to_string(m_gold) + "g | Exp: " + std::to_string(m_exp);
+    return Creature::ToString() + "\nLevel: " + std::to_string(m_level) + " | Gold: " + std::to_string(m_gold) + "g | Exp: " + std::to_string(m_exp);
 }
