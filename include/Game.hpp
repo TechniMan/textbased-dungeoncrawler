@@ -21,6 +21,7 @@ class Game {
 
         void InitialiseCombat();
         void EndCombat();
+        void TransitionState(GAMESTATE stateTo);
 
     public:
         Game();

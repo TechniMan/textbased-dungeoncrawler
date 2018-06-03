@@ -31,19 +31,47 @@ void Game::EndCombat() {
 	m_logger->WriteLine("You have been rewarded " + std::to_string(m_enemy->GoldWorth()) + "g and " + std::to_string(m_enemy->ExpWorth()) + "exp! Spend them in town.");
 }
 
+void Game::TransitionState(GAMESTATE stateTo) {
+	switch (stateTo) {
+		case GAMESTATE_TITLE:
+			break;
+		
+		case GAMESTATE_MENU:
+			m_gameState = GAMESTATE_MENU;
+			m_logger->WriteLine("Menu: From here, you can start a {new} game, {load} another character, or {exit}! At any time, {help} will tell you the available commands.");
+			break;
+		
+		case GAMESTATE_TOWN:
+			m_gameState = GAMESTATE_TOWN;
+			m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
+			m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
+			break;
+		
+		case GAMESTATE_COMBAT:
+			m_gameState = GAMESTATE_COMBAT;
+			m_adventureDepth = 0; // start at 0; it is incremented by InitCombat()
+			m_logger->WriteLine("You venture out into the wilderness.");
+			InitialiseCombat();
+			break;
+		
+		default:
+			break;
+	}
+}
+
 bool Game::ProcessCommand(std::string command, std::string mainArg, std::string fullArg) {
 	// quit
 	if (command == "exit" || command == "quit") {
 		if (m_gameState == GAMESTATE_TOWN) {
-			m_gameState = GAMESTATE_MENU;
-			m_logger->WriteLine("Quit game. Goodbye, " + m_player->GetName() + "!");
+			m_logger->WriteLine("Quit game in progress. See you, " + m_player->GetName() + "!");
+			TransitionState(GAMESTATE_MENU);
 		}
 		else if (m_gameState == GAMESTATE_MENU) {
 			m_logger->WriteLine("Bye!");
 			return false;
 		}
 		else {
-			//m_logger->WriteCommandNotFound(command);
+			m_logger->WriteCommandNotFound(command);
 		}
 	}
 
@@ -67,9 +95,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				if (fullArg.length() > 0) {
 					m_player = new Player(fullArg);
 					m_player->Heal(0);
-					m_gameState = GAMESTATE_TOWN;
-					m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
-					m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
+					TransitionState(GAMESTATE_TOWN);
 				}
 				else {
 					m_logger->WriteLine("Please specify a name for the brave new hero!");
@@ -80,9 +106,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 					Player * loadPlayer = new Player(fullArg);
 					if (Player::Load(GAME_SAVES_DIRECTORY + fullArg + ".sav", *loadPlayer)) {
 						m_player = loadPlayer;
-						m_gameState = GAMESTATE_TOWN;
-						m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
-						m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
+						TransitionState(GAMESTATE_TOWN);
 					}
 					else {
 						m_logger->WriteLine("Unfortunately " + fullArg + " couldn't be loaded. Did you spell it right?");
@@ -129,10 +153,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			else if (command == "travel") {
 				if (m_player->HPPercentage() >= 0.5f) {
-					m_gameState = GAMESTATE_COMBAT;
-					m_adventureDepth = 0; // start at 0; it is incremented by InitCombat()
-					m_logger->WriteLine("You venture out into the wilderness.");
-					InitialiseCombat();
+					TransitionState(GAMESTATE_COMBAT);
 				}
 				else {
 					m_logger->WriteLine("You should think about resting up, first! HP: " + m_player->CurrentHealth());
@@ -220,7 +241,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						}
 						else {
 							m_logger->WriteLine("You return to town safely.");
-							m_gameState = GAMESTATE_TOWN;
+							TransitionState(GAMESTATE_TOWN);
 						}
 					}
 				}
@@ -259,7 +280,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				else {
 					m_logger->WriteLine("You try to get away... and succeeded!");
 					m_logger->WriteLine("The " + m_enemy->GetName() + " takes a final swing at you!");
-					m_gameState = GAMESTATE_TOWN;
+					TransitionState(GAMESTATE_TOWN);
 				}
 				takenTurn = true;
 			}
@@ -285,8 +306,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				if (!m_player->IsAlive()) {
 					m_logger->WriteLine("The brave hero, " + m_player->GetName() + ", has fallen to a " + m_enemy->GetName() + "!");
 					
-					m_gameState = GAMESTATE_MENU;
-					m_logger->WriteLine("Thank you for playing! You have been returned to the main menu.");
+					//m_logger->WriteLine("Thank you for playing! You have been returned to the main menu.");
+					TransitionState(GAMESTATE_MENU);
 				}
 				// else report player and enemy statuses
 				else {
@@ -296,8 +317,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			break;
 
 		default:
-			m_logger->WriteError("INVALID_GAMESTATE");
-			m_gameState = GAMESTATE_MENU;
+			m_logger->WriteError("Game::ProcessCommand::INVALID_GAMESTATE");
+			TransitionState(GAMESTATE_MENU);
 			break;
 	}
 	return true;
