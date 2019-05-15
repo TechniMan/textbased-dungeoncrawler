@@ -1,9 +1,10 @@
-IDIR =../include
+IDIR=include
+SDIR=src
 CC=g++
 CFLAGS=-I$(IDIR)
 
 ODIR=obj
-LDIR =../lib
+LDIR=lib
 
 LIBS=
 
@@ -14,13 +15,15 @@ _OBJ = Logger.o Utilities.o Weapon.o Creature.o Player.o Enemy.o Game.o main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
-$(ODIR)/%.o: %.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+$(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
+	mkdir -p $(ODIR)
+	$(CC) -c -o $@ $< $(CFLAGS) -std=c++11
 
 cpp-cli-rpg: $(OBJ)
-	$(CC) -g -o ../bin/$@.exec $^ $(CFLAGS) $(LIBS) -std=c++11
+	mkdir -p bin
+	$(CC) -g -o bin/$@.exec $^ $(CFLAGS) $(LIBS) -std=c++11
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+	rm -rf $(ODIR) *~ core $(INCDIR)/*~ bin
