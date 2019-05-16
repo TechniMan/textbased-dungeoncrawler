@@ -13,7 +13,7 @@ class Logger {
         ~Logger();
 
         void Write(std::string out) const;
-        void WriteLine(std::string outLine) const;
+        void WriteLine(std::string outLine = "") const;
         void WriteError(std::string errorMessage) const;
         void WriteCommandNotFound(std::string unknownCommand) const;
         void WriteHelp(unsigned int gameState) const;
