@@ -27,6 +27,7 @@ class Game {
         Game();
         ~Game();
 
+        // returns true to keep playing, or false to end the game loop
         bool ProcessCommand(std::string command, std::string mainArg, std::string fullArg);
 };
 
