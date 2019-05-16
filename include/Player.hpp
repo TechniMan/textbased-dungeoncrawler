@@ -17,7 +17,7 @@ class Player : public Creature {
         ~Player();
 
         bool Pay(unsigned int goldCost);
-        unsigned int LevelUpCost();
+        unsigned int LevelUpCost() const;
         bool LevelUp(CREATURE_ABILITIES ability);
         void Reward(unsigned int gold, unsigned int experience);
         virtual std::string ToString() const override;

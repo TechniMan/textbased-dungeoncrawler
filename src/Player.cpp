@@ -73,7 +73,7 @@ bool Player::Pay(unsigned int goldCost) {
     return false;
 }
 
-unsigned int Player::LevelUpCost() {
+unsigned int Player::LevelUpCost() const {
     // gets gradually more expensive
     return 10u + pow((double)m_level, 1.1);
 }
