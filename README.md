@@ -18,8 +18,6 @@ Requires: make, g++
 ```bash
 $ git clone https://github.com/techniman/cpp-cli-rpg.git
 $ cd cpp-cli-rpg
-$ cd src
 $ make
-$ cd ..
 $ bin/cpp-cli-rpg.exec
 ```
