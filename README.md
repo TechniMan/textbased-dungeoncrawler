@@ -1,5 +1,5 @@
-# C++ CLI RPG
-### or C++ Command-Line-Interface Role-Playing-Game
+# TextBased-DungeonCrawler
+### or A text-based dungeon crawler in C++
 
 It has a dumb name because I am bad at names.
 
@@ -16,8 +16,8 @@ Requires: make, g++
 ## How To Build
 
 ```bash
-$ git clone https://github.com/techniman/cpp-cli-rpg.git
+$ git clone https://github.com/techniman/textbased-dungeoncrawler.git
 $ cd cpp-cli-rpg
 $ make
-$ bin/cpp-cli-rpg.exec
+$ bin/cpp-cli-rpg
 ```

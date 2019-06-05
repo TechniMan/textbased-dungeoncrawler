@@ -21,7 +21,7 @@ $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 
 cpp-cli-rpg: $(OBJ)
 	mkdir -p bin
-	$(CC) -g -o bin/$@.exec $^ $(CFLAGS) $(LIBS) -std=c++11
+	$(CC) -g -o bin/$@ $^ $(CFLAGS) $(LIBS) -std=c++11
 
 .PHONY: clean
 
