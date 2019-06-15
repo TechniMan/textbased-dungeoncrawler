@@ -232,6 +232,21 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				m_logger->WriteLine(m_player->GetInventoryList());
 			}
 
+			else if (command == "shop") {
+				if (mainArg == "inventory") {
+					// TODO: list all the shop's inventory and prices
+					m_logger->WriteLine("Not implemented yet!");
+				}
+				else if (mainArg == "buy") {
+					// TODO: add item to player inventory if they can pay
+					m_logger->WriteLine("Not implemented yet!");
+				}
+				else if (mainArg == "sell") {
+					// TODO: allow player to sell item for money?
+					m_logger->WriteLine("Not implemented yet!");
+				}
+			}
+
 			else if (command != "help" && command != "exit" && command != "quit") {
 				m_logger->WriteCommandNotFound(command);
 			}

@@ -1,5 +1,5 @@
-#include "../include/Logger.hpp"
-#include "../include/GAMESTATE.hpp"
+#include "Logger.hpp"
+#include "GAMESTATE.hpp"
 
 Logger::Logger() {
 }
@@ -29,21 +29,22 @@ void Logger::WriteHelp(unsigned int gameState) const {
     switch (gameState)
     {
         case GAMESTATE_MENU:
-            WriteLine("new <name>: start a new game (with name [name])");
+            WriteLine("new <name>:  start a new game (with name [name])");
             WriteLine("load <name>: load an existing game with name <name>");
             //WriteLine("contact: print contact details for the developer (hello! we're friendly!)");
-            WriteLine("about: show general information about the game; who developed it and why");
+            WriteLine("about:       show general information about the game; who developed it and why");
             // exit: exit the game
             break;
 
         case GAMESTATE_TOWN:
-            WriteLine("rest: restore your health, heal your wounds, and save the game");
-            WriteLine("travel: go out in search of adventure and danger");
-            WriteLine("status: show info about you");
-            // learn/levelup/skillup: attempt to spend exp
-            WriteLine("levelup <skillname>: attempt to increase your <skillname> skill by spending exp");
-            // buy <item>: attempt to buy <item>
-            // sell <item>: sell <item>
+            WriteLine("rest:              restore your health, heal your wounds, and save the game");
+            WriteLine("travel:            go out in search of adventure and danger");
+            WriteLine("status:            show info about you");
+            WriteLine("levelup <ability>: attempt to increase your <ability> score by spending exp");
+            WriteLine("inventory:         list your inventory");
+            // shop inventory: list shop stock
+            // shop buy <item>: attempt to buy <item>
+            // shop sell <item>: sell <item>
             // don <equipment>: attempt to don <equipment>
             // doff <equipment>: attempt to doff <equipment>
             // quit: quit to the menu (alias: exit)
@@ -54,7 +55,7 @@ void Logger::WriteHelp(unsigned int gameState) const {
             //WriteLine("cast <spell>: cast <spell> at the target");
             //WriteLine("consume <item>: verb a consumable item");
             WriteLine("status: show your & your opponent's info");
-            WriteLine("run: attempt to flee from your opponent");
+            WriteLine("run:    attempt to flee from your opponent");
             break;
 
         default:

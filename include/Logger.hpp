@@ -5,18 +5,18 @@
 #include <iostream>
 
 class Logger {
-    private:
-        //std::ostream m_outStream;
+private:
+    //std::ostream m_outStream;
 
-    public:
-        Logger();
-        ~Logger();
+public:
+    Logger();
+    ~Logger();
 
-        void Write(std::string out) const;
-        void WriteLine(std::string outLine = "") const;
-        void WriteError(std::string errorMessage) const;
-        void WriteCommandNotFound(std::string unknownCommand) const;
-        void WriteHelp(unsigned int gameState) const;
+    void Write(std::string out) const;
+    void WriteLine(std::string outLine = "") const;
+    void WriteError(std::string errorMessage) const;
+    void WriteCommandNotFound(std::string unknownCommand) const;
+    void WriteHelp(unsigned int gameState) const;
 };
 
 #endif // _LOGGER_HPP_
