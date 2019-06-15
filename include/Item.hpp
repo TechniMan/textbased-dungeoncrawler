@@ -6,21 +6,20 @@
 
 #include "Creature.hpp"
 
-enum Items {
+enum ITEMS {
     ITEM_NULL,
     ITEM_HEALTH_POTION
 };
 
-struct Item {
-    uint id;
-    std::string name;
+class Item {
+private:
+    Item(void) {}
+    Item(const Item &) {}
 
-    Item(uint itemId, std::string itemName);
-    Item(const Item&);
-    std::string ToString(void) const noexcept;
-
-    static bool UseItem(Items item, Creature& user, Creature& target) noexcept;
-    static Item GetByName(std::string name) noexcept;
+public:
+    static bool UseItem(ITEMS item, Creature& user, Creature& target) noexcept;
+    static ITEMS GetByName(std::string name) noexcept;
+    static std::string GetName(ITEMS item) noexcept;
 };
 
 #endif // _ITEMS_HPP_
