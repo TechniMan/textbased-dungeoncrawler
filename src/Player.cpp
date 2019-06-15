@@ -101,3 +101,18 @@ void Player::Reward(unsigned int gold, unsigned int exp) {
 std::string Player::ToString() const {
     return Creature::ToString() + "\nLevel: " + std::to_string(m_level) + " | Gold: " + std::to_string(m_gold) + "g | Exp: " + std::to_string(m_exp);
 }
+
+bool Player::Give(ITEMS item, uint quantity) {
+    return m_inventory.AddItem(item, quantity);
+}
+
+bool Player::Discard(ITEMS item, uint quantity) {
+    return m_inventory.RemoveItem(item, quantity);
+}
+
+bool Player::Consume(ITEMS item, Creature & opponent, uint quantity) {
+    if (m_inventory.RemoveItem(item, quantity)) {
+        return Item::UseItem(item, *this, opponent);
+    }
+    return false;
+}
