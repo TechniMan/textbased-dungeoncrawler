@@ -13,3 +13,23 @@ int Min(int a, int b) {
     }
     return b;
 }
+
+std::string to_lower(std::string in) {
+    std::string result = "";
+
+    for (char c : in) {
+        result += std::tolower(c);
+    }
+
+    return result;
+}
+
+std::string to_upper(std::string in) {
+    std::string result = "";
+
+    for (char c : in) {
+        result += std::toupper(c);
+    }
+
+    return result;
+}
