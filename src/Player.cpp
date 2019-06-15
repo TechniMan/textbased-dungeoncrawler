@@ -116,3 +116,7 @@ bool Player::Consume(ITEMS item, Creature & opponent, uint quantity) {
     }
     return false;
 }
+
+std::string Player::GetInventoryList(void) const noexcept {
+    return m_inventory.ListItems();
+}

@@ -28,6 +28,7 @@ public:
     bool Give(ITEMS item, uint quantity = 1);
     bool Discard(ITEMS item, uint quantity = 1);
     bool Consume(ITEMS item, Creature& opponent, uint quantity = 1);
+    std::string GetInventoryList(void) const noexcept;
 };
 
 #endif // _PLAYER_HPP_

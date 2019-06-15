@@ -42,5 +42,9 @@ std::string Inventory::ListItems(void) const noexcept {
         result += Item::GetName(item.first) + ":"
              + std::to_string(item.second) + "; ";
     }
+
+    if (result == "") {
+        result = "Inventory is empty.";
+    }
     return result;
 }

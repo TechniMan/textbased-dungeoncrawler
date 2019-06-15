@@ -2,18 +2,26 @@
 
 #include <cmath>
 
+
+
 std::string GAME_SAVES_DIRECTORY = "saves/";
+
+
 
 Game::Game() {
 	m_logger = new Logger();
 	m_rng = pcg32();
 }
 
+
+
 Game::~Game() {
 	if (m_logger != nullptr) delete m_logger;
 	if (m_enemy != nullptr) delete m_enemy;
 	if (m_player != nullptr) delete m_player;
 }
+
+
 
 void Game::InitialiseCombat() {
 	m_adventureDepth++;
@@ -26,10 +34,14 @@ void Game::InitialiseCombat() {
 	m_logger->WriteLine("You could try to {attack} it, check your and its {status}, or try and {run} away back to safety!");
 }
 
+
+
 void Game::EndCombat() {
 	m_player->Reward(m_enemy->GoldWorth(), m_enemy->ExpWorth());
 	m_logger->WriteLine("You have been rewarded " + std::to_string(m_enemy->GoldWorth()) + "g and " + std::to_string(m_enemy->ExpWorth()) + "exp! Spend them in town.");
 }
+
+
 
 void Game::TransitionState(GAMESTATE stateTo) {
 	m_logger->WriteLine();
@@ -60,6 +72,8 @@ void Game::TransitionState(GAMESTATE stateTo) {
 			break;
 	}
 }
+
+
 
 // returns true to keep playing, or false to end the game loop
 bool Game::ProcessCommand(std::string command, std::string mainArg, std::string fullArg) {
@@ -95,6 +109,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			m_logger->WriteHelp(m_gameState);
 			break;
 		
+
+
 		case GAMESTATE_MENU:
 			if (command == "new") {
 				if (fullArg.length() > 0) {
@@ -129,6 +145,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				m_logger->WriteCommandNotFound(command);
 			}
 			break;
+
+
 
 		case GAMESTATE_TOWN:
 			if (command == "rest") {
@@ -209,10 +227,17 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				}
 			}
 
+			else if (command == "inventory") {
+				// list player inventory
+				m_logger->WriteLine(m_player->GetInventoryList());
+			}
+
 			else if (command != "help" && command != "exit" && command != "quit") {
 				m_logger->WriteCommandNotFound(command);
 			}
 			break;
+
+
 
 		case GAMESTATE_COMBAT:
 			bool takenTurn;
@@ -326,6 +351,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			transitionState = GAMESTATE_MENU;
 			break;
 	}
+
+
 
 	if (transitionState != m_gameState)
 	{
