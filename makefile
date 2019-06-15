@@ -5,6 +5,7 @@ CFLAGS=-I$(IDIR)
 
 ODIR=obj
 LDIR=lib
+BDIR=bin
 
 LIBS=
 
@@ -14,16 +15,15 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = Logger.o Utilities.o Weapon.o Creature.o Player.o Enemy.o Game.o main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
 	mkdir -p $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS) -std=c++11
 
 cpp-cli-rpg: $(OBJ)
-	mkdir -p bin
+	mkdir -p $(BDIR)
 	$(CC) -g -o bin/$@ $^ $(CFLAGS) $(LIBS) -std=c++11
 
 .PHONY: clean
 
 clean:
-	rm -rf $(ODIR) *~ core $(INCDIR)/*~ bin
+	rm -rf $(ODIR) *~ core $(INCDIR)/*~ $(BDIR)
