@@ -27,7 +27,7 @@ int main(int argc, char ** args) {
     Game * game = new Game();
 
     // intro
-    logger->WriteLine("C++-based command-line RPG, by Will Thomas.");
+    logger->WriteLine("C++-based text-based dungeon-crawling RPG, by Will Thomas @techniman");
     logger->WriteLine("Still in-development, so if anything breaks, please let me know! Cheers, and enjoy!");
     logger->WriteLine("");
     logger->WriteLine("Menu: From here, you can start a {new} game, {load} another character, or {exit}! At any time, {help} will tell you the available commands.");

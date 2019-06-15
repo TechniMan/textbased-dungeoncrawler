@@ -81,8 +81,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 	if (command == "exit" || command == "quit") {
 		if (m_gameState == GAMESTATE_TOWN) {
 			m_logger->WriteLine("Quit game in progress. See you, " + m_player->GetName() + "!");
-			TransitionState(GAMESTATE_MENU);
-			return true;
+			return false;
 		}
 		else if (m_gameState == GAMESTATE_MENU) {
 			m_logger->WriteLine("Bye!");
