@@ -6,20 +6,15 @@
 
 #include "Creature.hpp"
 
-enum ITEMS {
-    ITEM_NULL,
-    ITEM_HEALTH_POTION
+enum class ITEMS {
+    NULL_ITEM,
+    HEALTH_POTION
 };
 
-class Item {
-private:
-    Item(void) {}
-    Item(const Item &) {}
-
-public:
-    static bool UseItem(ITEMS item, Creature& user, Creature& target) noexcept;
-    static ITEMS GetByName(std::string name) noexcept;
-    static std::string GetName(ITEMS item) noexcept;
+namespace Item {
+    bool UseItem(ITEMS item, Creature& user, Creature& target) noexcept;
+    ITEMS GetByName(std::string name) noexcept;
+    std::string GetName(ITEMS item) noexcept;
 };
 
 #endif // _ITEMS_HPP_

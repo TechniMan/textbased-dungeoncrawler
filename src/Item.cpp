@@ -6,7 +6,7 @@ bool Item::UseItem(ITEMS item, Creature& user, Creature& target) noexcept {
 
     switch (item)
     {
-    case ITEM_HEALTH_POTION:
+    case ITEMS::HEALTH_POTION:
         user.Heal(20U);
         break;
     
@@ -19,10 +19,10 @@ bool Item::UseItem(ITEMS item, Creature& user, Creature& target) noexcept {
 }
 
 ITEMS Item::GetByName(std::string name) noexcept {
-    ITEMS result = ITEM_NULL;
+    ITEMS result = ITEMS::NULL_ITEM;
 
     if (to_lower(name) == "health potion") {
-        result = ITEM_HEALTH_POTION;
+        result = ITEMS::HEALTH_POTION;
     }
     
     return result;
@@ -33,7 +33,7 @@ std::string Item::GetName(ITEMS id) noexcept {
 
     switch (id)
     {
-    case ITEM_HEALTH_POTION:
+    case ITEMS::HEALTH_POTION:
         name = "Health Potion";
         break;
     
