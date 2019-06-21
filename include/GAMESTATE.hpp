@@ -1,12 +1,12 @@
 #ifndef _GAME_STATE_HPP_
 #define _GAME_STATE_HPP_
 
-enum GAMESTATE
+enum class GAMESTATE
 {
-    GAMESTATE_TITLE = 0,
-    GAMESTATE_MENU = 1,
-    GAMESTATE_TOWN = 2,
-    GAMESTATE_COMBAT = 3
+    TITLE,
+    MENU,
+    TOWN,
+    COMBAT
 };
 
 #endif // _GAME_STATE_HPP_

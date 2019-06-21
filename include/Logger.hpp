@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+#include "GAMESTATE.hpp"
+
 class Logger {
 private:
     //std::ostream m_outStream;
@@ -16,7 +18,7 @@ public:
     void WriteLine(std::string outLine = "") const;
     void WriteError(std::string errorMessage) const;
     void WriteCommandNotFound(std::string unknownCommand) const;
-    void WriteHelp(unsigned int gameState) const;
+    void WriteHelp(GAMESTATE gameState) const;
 };
 
 #endif // _LOGGER_HPP_

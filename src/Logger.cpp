@@ -23,12 +23,12 @@ void Logger::WriteCommandNotFound(std::string unknownCommand) const {
     WriteLine("I'm afraid that " + unknownCommand + " is not a valid command; try 'help'. Sorry!");
 }
 
-void Logger::WriteHelp(unsigned int gameState) const {
+void Logger::WriteHelp(GAMESTATE gameState) const {
     WriteLine("Available commands are:");
     
     switch (gameState)
     {
-        case GAMESTATE_MENU:
+        case GAMESTATE::MENU:
             WriteLine("new <name>:  start a new game (with name [name])");
             WriteLine("load <name>: load an existing game with name <name>");
             //WriteLine("contact: print contact details for the developer (hello! we're friendly!)");
@@ -36,7 +36,7 @@ void Logger::WriteHelp(unsigned int gameState) const {
             // exit: exit the game
             break;
 
-        case GAMESTATE_TOWN:
+        case GAMESTATE::TOWN:
             WriteLine("rest:              restore your health, heal your wounds, and save the game");
             WriteLine("travel:            go out in search of adventure and danger");
             WriteLine("status:            show info about you");
@@ -50,7 +50,7 @@ void Logger::WriteHelp(unsigned int gameState) const {
             // quit: quit to the menu (alias: exit)
             break;
 
-        case GAMESTATE_COMBAT:
+        case GAMESTATE::COMBAT:
             WriteLine("attack: hit the damn thig with your pointy stick");
             //WriteLine("cast <spell>: cast <spell> at the target");
             //WriteLine("consume <item>: verb a consumable item");

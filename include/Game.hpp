@@ -14,7 +14,7 @@ class Game {
         Logger * m_logger = nullptr;
         pcg32 m_rng;
 
-        unsigned int m_gameState = GAMESTATE_MENU;
+        GAMESTATE m_gameState = GAMESTATE::MENU;
         unsigned int m_adventureDepth = 0;
         Player * m_player = nullptr;
         Enemy * m_enemy = nullptr;
