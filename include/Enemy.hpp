@@ -1,7 +1,7 @@
 #ifndef _ENEMY_HPP_
 #define _ENEMY_HPP_
 
-#include "../include/Creature.hpp"
+#include "Creature.hpp"
 
 class Enemy : public Creature {
     private:

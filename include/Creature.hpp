@@ -2,9 +2,9 @@
 #define _CREATURE_HPP_
 
 #include <string>
-#include "../include/Utilities.hpp"
-#include "../include/Weapon.hpp"
-#include "../include/pcg-random/pcg_random.hpp"
+#include "Utilities.hpp"
+#include "Weapon.hpp"
+#include "pcg-random/pcg_random.hpp"
 
 enum CREATURE_ABILITIES {
     CREATURE_ABILITIES_STRENGTH,

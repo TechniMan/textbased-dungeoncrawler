@@ -1,4 +1,4 @@
-#include "../include/Creature.hpp"
+#include "Creature.hpp"
 #include <cmath>
 
 Creature::Creature(std::string& name, unsigned int baseHp, Weapon& weapon)

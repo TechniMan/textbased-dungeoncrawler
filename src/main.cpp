@@ -19,7 +19,7 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-#include "../include/Game.hpp"
+#include "Game.hpp"
 
 // arguments are ignored lol
 int main(int argc, char ** args) {

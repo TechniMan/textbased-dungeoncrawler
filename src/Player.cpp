@@ -1,7 +1,7 @@
-#include "../include/Player.hpp"
+#include "Player.hpp"
 
 #include <fstream>
-#include "../include/nlohmann/json.hpp"
+#include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
 bool Player::Load(std::string filename, Player& player) {

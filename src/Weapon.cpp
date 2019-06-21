@@ -1,4 +1,4 @@
-#include "../include/Weapon.hpp"
+#include "Weapon.hpp"
 
 Weapon::Weapon(std::string name, unsigned int minDamage, unsigned int maxDamage)
     : m_name(name), m_minimumDamage(minDamage), m_maximumDamage(maxDamage) {

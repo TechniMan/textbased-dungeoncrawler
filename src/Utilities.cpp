@@ -1,4 +1,4 @@
-#include "../include/Utilities.hpp"
+#include "Utilities.hpp"
 
 int Max(int a, int b) {
     if (a > b) {

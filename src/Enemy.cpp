@@ -1,4 +1,4 @@
-#include "../include/Enemy.hpp"
+#include "Enemy.hpp"
 
 Enemy::Enemy(std::string& name, Weapon& weapon, int str, int dex, int con, int gold, int exp)
     : Creature(name, 10, weapon) {
