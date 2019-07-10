@@ -2,7 +2,6 @@
 
 #include <fstream>
 #include "nlohmann/json.hpp"
-using json = nlohmann::json;
 
 bool Player::Load(std::string filename, Player& player) {
     // read from file
@@ -11,7 +10,7 @@ bool Player::Load(std::string filename, Player& player) {
         return false;
     }
 
-    json jIn;
+    nlohmann::json jIn;
     fileIn >> jIn;
     fileIn.close();
     if (!jIn.is_object()) {
@@ -34,7 +33,7 @@ bool Player::Load(std::string filename, Player& player) {
 
 bool Player::Save(std::string filename) {
     // serialise to json
-    json jOut;
+    nlohmann::json jOut;
     jOut["strength"] = m_strength;
     jOut["dexterity"] = m_dexterity;
     jOut["constitution"] = m_constitution;
@@ -42,6 +41,7 @@ bool Player::Save(std::string filename) {
     jOut["gold"] = m_gold;
     jOut["experience"] = m_exp;
     jOut["weapon"] = m_weapon.GetName();
+    jOut["inventory"] = m_itemInventory.Serialise();
 
     // write to file
     std::ofstream fileOut(filename);
