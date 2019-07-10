@@ -28,6 +28,10 @@ std::string Creature::GetName() const {
     return m_name;
 }
 
+
+
+/// Combat
+
 bool Creature::IsAlive() const {
     return m_currentHp > 0;
 }
@@ -86,4 +90,44 @@ std::string Creature::ToString() const {
     if (conMod > 0) { conModStr = "+" + conModStr; }
 
     return m_name + " - Health: " + CurrentHealth() + " | Str:" + std::to_string(m_strength) + "(" + strModStr + ") | Dex:" + std::to_string(m_dexterity) + "(" + dexModStr + ") | Con:" + std::to_string(m_constitution) + "(" + conModStr + ")" + " | Weapon: " + m_weapon.GetName();
+}
+
+
+
+/// Inventory
+
+bool Creature::UseItem(ITEMS item, Creature& target) noexcept {
+    bool result = true;
+
+    switch (item)
+    {
+    case ITEMS::HEALTH_POTION:
+        Heal(20U);
+        break;
+    
+    default:
+        result = false;
+        break;
+    }
+
+    return result;
+}
+
+bool Creature::Give(ITEMS item, unsigned int quantity) {
+    return m_itemInventory.AddItem(item, quantity);
+}
+
+bool Creature::Discard(ITEMS item, unsigned int quantity) {
+    return m_itemInventory.RemoveItem(item, quantity);
+}
+
+bool Creature::Consume(ITEMS item, Creature& opponent, unsigned int quantity) {
+    if (m_itemInventory.RemoveItem(item, quantity)) {
+        return UseItem(item, opponent);
+    }
+    return false;
+}
+
+std::string Creature::GetInventoryList(void) const noexcept {
+    return m_itemInventory.ListItems();
 }

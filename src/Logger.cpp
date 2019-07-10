@@ -1,5 +1,4 @@
 #include "Logger.hpp"
-#include "GAMESTATE.hpp"
 
 Logger::Logger() {
 }

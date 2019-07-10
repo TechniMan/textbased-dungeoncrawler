@@ -1,23 +1,6 @@
 #include "Item.hpp"
 #include "Utilities.hpp"
 
-bool Item::UseItem(ITEMS item, Creature& user, Creature& target) noexcept {
-    bool result = true;
-
-    switch (item)
-    {
-    case ITEMS::HEALTH_POTION:
-        user.Heal(20U);
-        break;
-    
-    default:
-        result = false;
-        break;
-    }
-
-    return result;
-}
-
 ITEMS Item::GetByName(std::string name) noexcept {
     ITEMS result = ITEMS::NULL_ITEM;
 
