@@ -22,8 +22,10 @@ public:
     bool AddItem(ITEMS itemId, unsigned int quantity = 1);
     // Removes quantity of item from inventory. If inventory didn't contain item, returns false.
     bool RemoveItem(ITEMS itemId, unsigned int quantity = 1);
+    // Clear the inventory
+    void Clear(void) noexcept;
     // Returns a string representation of the inventory. itemname:quantity;
-    std::string ListItems(void) const noexcept;
+    const std::map<ITEMS, unsigned int>& GetItems(void) const noexcept;
     // For saving
     nlohmann::json Serialise(void) const noexcept;
     // For loading

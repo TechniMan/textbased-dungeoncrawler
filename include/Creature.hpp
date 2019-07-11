@@ -79,7 +79,7 @@ public:
     bool Discard(ITEMS item, unsigned int quantity = 1);
     // Make the creature consume (use & discard) 1 of item
     bool Consume(ITEMS item, Creature& opponent, unsigned int quantity = 1);
-    std::string GetInventoryList(void) const noexcept;
+    const ItemInventory& GetInventory(void) const noexcept;
 };
 
 #endif // _CREATURE_HPP_

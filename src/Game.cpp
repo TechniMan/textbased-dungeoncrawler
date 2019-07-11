@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-
-
 std::string GAME_SAVES_DIRECTORY = "saves/";
 
 
@@ -57,7 +55,7 @@ void Game::TransitionState(GAMESTATE stateTo) {
 		
 		case GAMESTATE::TOWN:
 			m_gameState = GAMESTATE::TOWN;
-			m_logger->WriteLine("Welcome to town, " + m_player->GetName() +"!");
+			m_logger->WriteLine("Welcome to town, " + m_player->GetName() + "!");
 			m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
 			break;
 		
@@ -228,7 +226,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			else if (command == "inventory") {
 				// list player inventory
-				m_logger->WriteLine(m_player->GetInventoryList());
+				m_logger->WriteInventory(m_player->GetInventory());
 			}
 
 			else if (command == "shop") {

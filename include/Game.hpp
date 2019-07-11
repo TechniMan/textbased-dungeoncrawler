@@ -11,13 +11,13 @@
 
 class Game {
     private:
-        Logger * m_logger = nullptr;
+        Logger* m_logger = nullptr;
         pcg32 m_rng;
 
         GAMESTATE m_gameState = GAMESTATE::MENU;
         unsigned int m_adventureDepth = 0;
-        Player * m_player = nullptr;
-        Enemy * m_enemy = nullptr;
+        Player* m_player = nullptr;
+        Enemy* m_enemy = nullptr;
 
         void InitialiseCombat();
         void EndCombat();

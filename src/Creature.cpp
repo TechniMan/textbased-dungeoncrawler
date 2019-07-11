@@ -128,6 +128,6 @@ bool Creature::Consume(ITEMS item, Creature& opponent, unsigned int quantity) {
     return false;
 }
 
-std::string Creature::GetInventoryList(void) const noexcept {
-    return m_itemInventory.ListItems();
+const ItemInventory& Creature::GetInventory(void) const noexcept {
+    return m_itemInventory;
 }

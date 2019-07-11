@@ -37,17 +37,12 @@ bool ItemInventory::RemoveItem(ITEMS itemId, unsigned int quantity) {
     return itemRemoved;
 }
 
-std::string ItemInventory::ListItems(void) const noexcept {
-    std::string result = "";
-    for (auto object : m_items) {
-        result += Item::GetName(object.first) + ":"
-             + std::to_string(object.second) + "; ";
-    }
+void ItemInventory::Clear(void) noexcept {
+    m_items.clear();
+}
 
-    if (result == "") {
-        result = "ItemInventory is empty.";
-    }
-    return result;
+const std::map<ITEMS, unsigned int>& ItemInventory::GetItems(void) const noexcept {
+    return m_items;
 }
 
 nlohmann::json ItemInventory::Serialise(void) const noexcept {
