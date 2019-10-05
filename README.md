@@ -15,7 +15,8 @@ GNU GPL v3. I feel like this is a simple little project that would be more usefu
 
 ## Dependencies
 
-No libraries, just requires these to build: cmake, make, g++
+* Requires: cmake, make, g++ to build.
+* Uses [nlohmann/json](https://github.com/nlohmann/json) (MIT) and [pcg-random](http://www.pcg-random.org/) (Apache 2.0), both included in the `include` directory.
 
 ## Plan
 
@@ -26,7 +27,7 @@ Coming soon.
 ```bash
 $ git clone https://github.com/techniman/textbased-dungeoncrawler.git
 $ cd textbased-dungeoncrawler
-$ cd build
+$ mkdir build && cd build
 $ cmake ..
 $ make
 $ ./textbased-dungeoncrawler
