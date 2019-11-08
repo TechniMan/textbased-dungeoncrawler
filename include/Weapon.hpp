@@ -6,6 +6,14 @@
 
 #include "pcg-random/pcg_random.hpp"
 
+enum class WEAPONS {
+    UNARMED,
+    DAGGER,
+    SHORTSWORD,
+    LONGSWORD,
+    GREATSWORD
+};
+
 class Weapon {
 private:
     std::string m_name;
@@ -13,13 +21,15 @@ private:
     unsigned int m_maximumDamage;
 
 public:
-    Weapon(std::string name, unsigned int maxDamage, unsigned int minDamage);
+    static WEAPONS GetFromName(std::string weaponName);
+
+    Weapon(std::string name, unsigned int minDamage, unsigned int maxDamage);
     
     std::string GetName() const noexcept;
     unsigned int DamageRange() const noexcept;
     unsigned int GetDamage(pcg32 rng) const;
 };
 
-extern std::map<std::string, Weapon> AvailableWeapons;
+extern std::map<WEAPONS, Weapon> AvailableWeapons;
 
-#endif //_WEAPON_HPP_
+#endif // _WEAPON_HPP_

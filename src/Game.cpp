@@ -25,7 +25,7 @@ void Game::InitialiseCombat() {
 	m_adventureDepth++;
 	unsigned int a = (unsigned int)(floorf((float)m_adventureDepth * 0.7f));
 	std::string kobold("kobold");
-	m_enemy = new Enemy(kobold, AvailableWeapons.at("Dagger"), a, a, a, 2 * m_adventureDepth, 3 * m_adventureDepth);
+	m_enemy = new Enemy(kobold, AvailableWeapons.at(WEAPONS::DAGGER), a, a, a, 2 * m_adventureDepth, 3 * m_adventureDepth);
 	m_enemy->Heal(0);
 
 	m_logger->WriteLine("You've come across a " + m_enemy->GetName() + "!");

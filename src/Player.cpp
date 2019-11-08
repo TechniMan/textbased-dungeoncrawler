@@ -27,7 +27,7 @@ bool Player::Load(std::string filename, Player& player) {
     player.m_gold = jIn["gold"];
     player.m_exp = jIn["experience"];
     player.m_currentHp = player.GetMaximumHp();
-    player.m_weapon = AvailableWeapons.at(jIn["weapon"]);
+    player.m_weapon = AvailableWeapons.at(Weapon::GetFromName(jIn["weapon"]));
     player.m_itemInventory = ItemInventory::Deserialise(jIn["inventory"]);
     
     return true;
@@ -57,7 +57,7 @@ bool Player::Save(std::string filename) {
 }
 
 Player::Player(std::string& name)
-    : Creature(name, 10, AvailableWeapons.at("Dagger")) {
+    : Creature(name, 10, AvailableWeapons.at(WEAPONS::UNARMED)) {
     m_strength = 0;
     m_dexterity = 0;
     m_constitution = 0;
