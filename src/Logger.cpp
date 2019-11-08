@@ -53,7 +53,7 @@ void Logger::WriteHelp(GAMESTATE gameState) const noexcept {
         case GAMESTATE::COMBAT:
             WriteLine("attack: hit the damn thig with your pointy stick");
             //WriteLine("cast <spell>: cast <spell> at the target");
-            //WriteLine("consume <item>: verb a consumable item");
+            WriteLine("consume <item>: verb a consumable item");
             WriteLine("status: show your & your opponent's info");
             WriteLine("run:    attempt to flee from your opponent");
             break;

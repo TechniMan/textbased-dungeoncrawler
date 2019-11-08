@@ -8,6 +8,7 @@
 #include "Enemy.hpp"
 #include "Logger.hpp"
 #include "GAMESTATE.hpp"
+#include "Shop.hpp"
 
 class Game {
     private:
@@ -18,6 +19,9 @@ class Game {
         unsigned int m_adventureDepth = 0;
         Player* m_player = nullptr;
         Enemy* m_enemy = nullptr;
+        Shop* m_townShop = nullptr;
+
+        void InitialiseShop();
 
         void InitialiseCombat();
         void EndCombat();

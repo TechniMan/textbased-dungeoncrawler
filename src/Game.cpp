@@ -39,6 +39,15 @@ void Game::EndCombat() {
 	m_logger->WriteLine("You have been rewarded " + std::to_string(m_enemy->GoldWorth()) + "g and " + std::to_string(m_enemy->ExpWorth()) + "exp! Spend them in town.");
 }
 
+void Game::InitialiseShop() {
+	if (m_townShop == nullptr) {
+		m_townShop = new Shop();
+		auto shopInv = std::map<ITEMS, uint>();
+		shopInv.emplace(ITEMS::HEALTH_POTION, 10U);
+		m_townShop->SetInventoryAndPrices(shopInv);
+	}
+}
+
 
 
 void Game::TransitionState(GAMESTATE stateTo) {
@@ -55,6 +64,7 @@ void Game::TransitionState(GAMESTATE stateTo) {
 		
 		case GAMESTATE::TOWN:
 			m_gameState = GAMESTATE::TOWN;
+			InitialiseShop();
 			m_logger->WriteLine("Welcome to town, " + m_player->GetName() + "!");
 			m_logger->WriteLine("Here in the main square, you could {rest} at the Inn or go {travel}ing in the wilderness in search of adventure and fortune. You can also check your {status}.");
 			break;
@@ -192,7 +202,9 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			}
 
 			else if (command == "levelup") {
-				if (mainArg == "str" || mainArg == "strength") {
+				auto abi = mainArg.substr(0, 3);
+				if (abi == "str")
+				{
 					if (m_player->LevelUp(CREATURE_ABILITIES_STRENGTH)) {
 						m_logger->WriteLine("Your strength score has increased!");
 					}
@@ -200,7 +212,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
 					}
 				}
-				else if (mainArg == "dex" || mainArg == "dexterity") {
+				else if (abi == "dex") {
 					if (m_player->LevelUp(CREATURE_ABILITIES_DEXTERITY)) {
 						m_logger->WriteLine("Your dexterity score has increased!");
 					}
@@ -208,7 +220,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
 					}
 				}
-				else if (mainArg == "con" || mainArg == "constitution") {
+				else if (abi == "con") {
 					if (m_player->LevelUp(CREATURE_ABILITIES_CONSTITUTION)) {
 						m_logger->WriteLine("Your constitution score has increased!");
 					}
@@ -230,17 +242,35 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			}
 
 			else if (command == "shop") {
-				if (mainArg == "inventory") {
-					// TODO: list all the shop's inventory and prices
-					m_logger->WriteLine("Not implemented yet!");
+				if (mainArg == "") {
+					m_logger->WriteLine("\"Good day to you, sir! May I interest you in {buy}in' somethin' from me {inventory}?\"");
+					m_logger->WriteLine("Please specify {shop} followed by a sub-command.");
 				}
-				else if (mainArg == "buy") {
-					// TODO: add item to player inventory if they can pay
-					m_logger->WriteLine("Not implemented yet!");
-				}
-				else if (mainArg == "sell") {
-					// TODO: allow player to sell item for money?
-					m_logger->WriteLine("Not implemented yet!");
+				else {
+					std::string itemName = fullArg.length() > mainArg.length() ? fullArg.substr(mainArg.length() + 1) : "";
+					if (mainArg == "inventory") {
+						m_logger->WriteInventory(m_townShop->GetInventory());
+					}
+					else if (mainArg == "buy") {
+						auto item = Item::GetByName(itemName);
+						uint itemCost = m_townShop->GetCostOf(item);
+						if (itemCost == 0) {
+							m_logger->WriteLine("\"'Fraid I en't got any o' those in stock at the moment.\"");
+						}
+						else {
+							if (m_player->Pay(itemCost)) {
+								m_player->Give(item);
+								m_logger->WriteLine("\"Pleasure doin' business. Stay safe out there!\"");
+							}
+							else {
+								m_logger->WriteLine("\"Oi! Ye can't afford this! Git outta here 'til ye gets yerself more coin.\"");
+							}
+						}
+					}
+					else if (mainArg == "sell") {
+						// TODO: allow player to sell items for money?
+						m_logger->WriteLine("Not implemented yet!");
+					}
 				}
 			}
 
@@ -260,8 +290,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
 				unsigned int attackRoll = roll + m_player->AttackBonus();
 				if (attackRoll >= m_enemy->Defense()) {
-					int dmg = 0;
-					m_enemy->Damage(dmg = m_player->AttackDamage(m_rng));
+					int dmg = m_player->AttackDamage(m_rng);
+					m_enemy->Damage(dmg);
 					m_logger->WriteLine("You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + ".");
 				}
 				else {
@@ -300,11 +330,13 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			else if (command == "consume") {
 				// consume a thing nom!
-				// check inventory for arg1
-				// if exists, consume it and end turn
-				//takenTurn = true;
-				// else report failure
-				m_logger->WriteLine("Not yet implemented!");
+				if (m_player->Consume(Item::GetByName(mainArg), *m_enemy)) {
+					m_logger->WriteLine("Mmm, " + mainArg + "! Delicious.");
+					takenTurn = true;
+				}
+				else {
+					m_logger->WriteLine("I'm afraid you can't consume " + mainArg + ". Do you have one in your {inventory}?");
+				}
 			}
 
 			else if (command == "status") {
@@ -336,8 +368,8 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
 				unsigned int attackRoll = roll + m_enemy->AttackBonus();
 				if (attackRoll >= m_player->Defense()) {
-					int dmg = 0;
-					m_player->Damage(dmg = m_enemy->AttackDamage(m_rng));
+					int dmg = m_enemy->AttackDamage(m_rng);
+					m_player->Damage(dmg);
 					m_logger->WriteLine("The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!");
 				}
 				else {
@@ -346,9 +378,11 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				
 				// check if player died
 				if (!m_player->IsAlive()) {
+					m_logger->WriteLine();
 					m_logger->WriteLine("The brave hero, " + m_player->GetName() + ", has fallen to a " + m_enemy->GetName() + "!");
-					
-					//m_logger->WriteLine("Thank you for playing! You have been returned to the main menu.");
+					m_logger->WriteLine();
+					m_logger->WriteLine("Thank you for playing! You have been returned to the main menu.");
+					m_logger->WriteLine();
 					transitionState = GAMESTATE::MENU;
 				}
 				// else report player and enemy statuses
