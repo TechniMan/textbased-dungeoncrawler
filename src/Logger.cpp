@@ -29,33 +29,32 @@ void Logger::WriteHelp(GAMESTATE gameState) const noexcept {
     switch (gameState)
     {
         case GAMESTATE::MENU:
-            WriteLine("new <name>:  start a new game (with name [name])");
-            WriteLine("load <name>: load an existing game with name <name>");
-            //WriteLine("contact: print contact details for the developer (hello! we're friendly!)");
-            WriteLine("about:       show general information about the game; who developed it and why");
-            // exit: exit the game
+            WriteLine("new <name>:         start a new game (with name [name])");
+            WriteLine("load <name>:        load an existing game with name <name>");
+            WriteLine("about:              show general information about the game; who developed it and why");
+            //WriteLine("contact:            print contact details for the developer (hello! I'm friendly!)");
             break;
 
         case GAMESTATE::TOWN:
-            WriteLine("rest:              restore your health, heal your wounds, and save the game");
-            WriteLine("travel:            go out in search of adventure and danger");
-            WriteLine("status:            show info about you");
-            WriteLine("levelup <ability>: attempt to increase your <ability> score by spending exp");
-            WriteLine("inventory:         list your inventory");
-            // shop inventory: list shop stock
-            // shop buy <item>: attempt to buy <item>
-            // shop sell <item>: sell <item>
-            // don <equipment>: attempt to don <equipment>
-            // doff <equipment>: attempt to doff <equipment>
-            // quit: quit to the menu (alias: exit)
+            WriteLine("rest:               restore your health, heal your wounds, and save the game");
+            WriteLine("travel:             go out in search of adventure and danger");
+            WriteLine("status:             show info about you");
+            WriteLine("levelup <ability>:  attempt to increase your <ability> score by spending exp");
+            WriteLine("inventory:          list your inventory");
+            WriteLine("shop inventory:     list shop inventory and prices");
+            WriteLine("shop buy <item>:    attempt to buy <item>");
+            //WriteLine("shop sell <item>:   sell <item>");
+            //WriteLine("don <equipment>:    attempt to don <equipment>");
+            //WriteLine("doff <equipment>:   attempt to doff <equipment>");
+            //WriteLine("quit:               quit to the menu");
             break;
 
         case GAMESTATE::COMBAT:
-            WriteLine("attack: hit the damn thig with your pointy stick");
-            //WriteLine("cast <spell>: cast <spell> at the target");
-            WriteLine("consume <item>: verb a consumable item");
-            WriteLine("status: show your & your opponent's info");
-            WriteLine("run:    attempt to flee from your opponent");
+            WriteLine("attack:             hit the damn thing");
+            //WriteLine("cast <spell>:       cast <spell> at the target");
+            WriteLine("consume <item>:     consume a consumable item");
+            WriteLine("status:             show your & your opponent's info");
+            WriteLine("run:                attempt to flee back to town");
             break;
 
         default:
@@ -63,7 +62,7 @@ void Logger::WriteHelp(GAMESTATE gameState) const noexcept {
     }
 
     WriteLine("help: this handy help message :)");
-    WriteLine("exit: quit the game");
+    WriteLine("exit: close the game");
 }
 
 void Logger::WriteItem(const std::pair<ITEMS, unsigned int>& item) const noexcept {
