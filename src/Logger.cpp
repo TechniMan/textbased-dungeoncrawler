@@ -1,11 +1,29 @@
 #include "Logger.hpp"
 #include <iomanip>
 
+const std::string Logger::Gray   = "\x1b[30m";
+const std::string Logger::Red    = "\x1b[31m";
+const std::string Logger::Green  = "\x1b[32m";
+const std::string Logger::Yellow = "\x1b[33m";
+const std::string Logger::Blue   = "\x1b[34m";
+const std::string Logger::Purple = "\x1b[35m";
+const std::string Logger::Cyan   = "\x1b[36m";
+const std::string Logger::White  = "\x1b[37m";
+const std::string Logger::Reset  = "\x1b[39m";
+
 Logger::Logger() {
 }
 
 Logger::~Logger() {
 }
+
+const std::string Logger::ResetColour   = White;
+const std::string Logger::BadColour     = Red;
+const std::string Logger::CommandColour = Blue;
+const std::string Logger::ItemColour    = Yellow;
+const std::string Logger::MagicColour   = Purple;
+const std::string Logger::NameColour    = Cyan;
+const std::string Logger::SuccessColour = Green;
 
 void Logger::Write(std::string out) const noexcept {
     std::cout << out;
@@ -19,6 +37,11 @@ void Logger::WriteError(std::string errorMessage) const noexcept {
     WriteLine("The game has encountered an error: " + errorMessage + "! Please send this message to the developer, and tell them what you were doing beforehand. You can find contact details with the 'about' command at the main menu. Thank you! <3");
 }
 
+void Logger::WriteCommandDescription(std::string commandName, std::string commandDescription) const noexcept {
+    std::cout << CommandColour << std::setw(20) << std::left << std::setfill(' ') << commandName
+              << ResetColour << std::setw(60) << commandDescription << std::endl;
+}
+
 void Logger::WriteCommandNotFound(std::string unknownCommand) const noexcept {
     WriteLine("I'm afraid that " + unknownCommand + " is not a valid command; try 'help'. Sorry!");
 }
@@ -29,45 +52,45 @@ void Logger::WriteHelp(GAMESTATE gameState) const noexcept {
     switch (gameState)
     {
         case GAMESTATE::MENU:
-            WriteLine("new <name>:         start a new game (with name [name])");
-            WriteLine("load <name>:        load an existing game with name <name>");
-            WriteLine("about:              show general information about the game; who developed it and why");
-            //WriteLine("contact:            print contact details for the developer (hello! I'm friendly!)");
+            WriteCommandDescription("new <name>", "start a new game (with name <name>)");
+            WriteCommandDescription("load <name>", "load an existing game with name <name>");
+            WriteCommandDescription("about", "show general information about the game; who developed it and why");
+            //WriteCommandDescription("contact", "print contact details for the developer (hello! I'm friendly!)");
             break;
 
         case GAMESTATE::TOWN:
-            WriteLine("rest:               restore your health, heal your wounds, and save the game");
-            WriteLine("travel:             go out in search of adventure and danger");
-            WriteLine("status:             show info about you");
-            WriteLine("levelup <ability>:  attempt to increase your <ability> score by spending exp");
-            WriteLine("inventory:          list your inventory");
-            WriteLine("shop inventory:     list shop inventory and prices");
-            WriteLine("shop buy <item>:    attempt to buy <item>");
-            //WriteLine("shop sell <item>:   sell <item>");
-            //WriteLine("don <equipment>:    attempt to don <equipment>");
-            //WriteLine("doff <equipment>:   attempt to doff <equipment>");
-            //WriteLine("quit:               quit to the menu");
+            WriteCommandDescription("rest", "restore your health, heal your wounds, and save the game");
+            WriteCommandDescription("travel", "go out in search of adventure and danger");
+            WriteCommandDescription("status", "show info about you");
+            WriteCommandDescription("levelup <ability>", "attempt to increase your <ability> score by spending exp");
+            WriteCommandDescription("inventory", "list your inventory");
+            WriteCommandDescription("shop inventory", "list shop inventory and prices");
+            WriteCommandDescription("shop buy <item>", "attempt to buy <item>");
+            //WriteCommandDescription("shop sell <item>", "sell <item>");
+            //WriteCommandDescription("don <equipment>", "attempt to don <equipment>");
+            //WriteCommandDescription("doff <equipment>", "attempt to doff <equipment>");
+            //WriteCommandDescription("quit", "quit to the menu");
             break;
 
         case GAMESTATE::COMBAT:
-            WriteLine("attack:             hit the damn thing");
-            //WriteLine("cast <spell>:       cast <spell> at the target");
-            WriteLine("consume <item>:     consume a consumable item");
-            WriteLine("status:             show your & your opponent's info");
-            WriteLine("run:                attempt to flee back to town");
+            WriteCommandDescription("attack", "hit the damn thing");
+            //WriteCommandDescription("cast <spell>", "cast <spell> at the target");
+            WriteCommandDescription("consume <item>", "consume a consumable item");
+            WriteCommandDescription("status", "show your & your opponent's info");
+            WriteCommandDescription("run", "attempt to flee back to town");
             break;
 
         default:
             break;
     }
 
-    WriteLine("help: this handy help message :)");
-    WriteLine("exit: close the game");
+    WriteCommandDescription("help", "this handy help message :)");
+    WriteCommandDescription("exit", "close the game");
 }
 
 void Logger::WriteItem(const std::pair<ITEMS, unsigned int>& item) const noexcept {
-    std::cout << std::setw(32) << std::left << std::setfill('.') << Item::GetName(item.first)
-              << std::setw(5) << std::right << std::setfill('.') << std::to_string(item.second)
+    std::cout << ItemColour << std::setw(32) << std::left << std::setfill('.') << Item::GetName(item.first)
+              << ResetColour << std::setw(5) << std::right << std::setfill('.') << std::to_string(item.second)
               << std::endl;
 }
 

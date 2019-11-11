@@ -27,12 +27,13 @@ int main(int argc, char ** args) {
     Game * game = new Game();
 
     // intro
+    logger->Write("\x1b[1m");
     logger->WriteLine("A text-based dungeon-crawling game, made by Will Thomas @techniman");
     logger->WriteLine("Made from scratch using straight-forward C++: https://github.com/techniman/textbased-dungeoncrawler");
     logger->WriteLine("Still in development, so if anything breaks, please let me know (or fix it)! Cheers, and enjoy!");
     logger->WriteLine();
     logger->WriteLine("Menu: From here, you can start a {new} game, {load} another character, or {exit}! At any time, {help} will tell you the available commands.");
-
+    
     // begin game loop
     std::string lineIn;
     logger->Write("\n> ");
