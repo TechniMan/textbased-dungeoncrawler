@@ -97,12 +97,14 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 		}
 		else {
 			m_logger->WriteCommandNotFound(command);
+			return true;
 		}
 	}
 
 	// help
 	else if (command == "help") {
 		m_logger->WriteHelp(m_gameState);
+		return true;
 	}
 
 	// else, play the game!
@@ -137,18 +139,18 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 						transitionState = GAMESTATE::TOWN;
 					}
 					else {
-						m_logger->WriteLine("Unfortunately " + fullArg + " couldn't be loaded. Did you spell it right?");
+						m_logger->WriteLine(m_logger->BadColour + "Unfortunately, " + m_logger->NameColour + fullArg + m_logger->BadColour + " couldn't be loaded. Did you spell it right?" + m_logger->ResetColour);
 					}
 				}
 				else {
-					m_logger->WriteLine("Please specify a name for the hero you wish to awaken!");
+					m_logger->WriteLine(m_logger->BadColour + "Please specify a name for the hero you wish to awaken!" + m_logger->ResetColour);
 				}
 			}
 			else if (command == "about") {
 				m_logger->WriteLine("GitHub: https://github.com/techniman/cpp-cli-rpg");
-				m_logger->WriteLine("Programmer: Will Thomas, technimanx@googlemail.com, https://github.com/techniman");
+				m_logger->WriteLine("Programmer: " + m_logger->NameColour + "Will Thomas" + m_logger->ResetColour + ", technimanx@googlemail.com, https://github.com/techniman");
 			}
-			else if (command != "help") {
+			else {
 				m_logger->WriteCommandNotFound(command);
 			}
 			break;
@@ -274,7 +276,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				}
 			}
 
-			else if (command != "help" && command != "exit" && command != "quit") {
+			else {
 				m_logger->WriteCommandNotFound(command);
 			}
 			break;
@@ -359,7 +361,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				takenTurn = true;
 			}
 
-			else if (command != "help") {
+			else {
 				m_logger->WriteCommandNotFound(command);
 			}
 

@@ -33,8 +33,10 @@ void Logger::WriteLine(std::string outLine) const noexcept {
     std::cout << outLine << std::endl;
 }
 
-void Logger::WriteError(std::string errorMessage) const noexcept {
-    WriteLine("The game has encountered an error: " + errorMessage + "! Please send this message to the developer, and tell them what you were doing beforehand. You can find contact details with the 'about' command at the main menu. Thank you! <3");
+void Logger::WriteError(std::string errorCode) const noexcept {
+    WriteLine(BadColour);
+    WriteLine("The game has encountered an error: " + errorCode + "! Please send this message to the developer, and tell them what you were doing beforehand. You can find contact details with the 'about' command at the main menu. Thank you! <3");
+    WriteLine(ResetColour);
 }
 
 void Logger::WriteCommandDescription(std::string commandName, std::string commandDescription) const noexcept {

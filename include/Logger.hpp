@@ -34,7 +34,7 @@ public:
 
     void Write(std::string out) const noexcept;
     void WriteLine(std::string outLine = "") const noexcept;
-    void WriteError(std::string errorMessage) const noexcept;
+    void WriteError(std::string errorCode) const noexcept;
     void WriteCommandDescription(std::string commandName, std::string commandDescription) const noexcept;
     void WriteCommandNotFound(std::string unknownCommand) const noexcept;
     void WriteHelp(GAMESTATE gameState) const noexcept;
