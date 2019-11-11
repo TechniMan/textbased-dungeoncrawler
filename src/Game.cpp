@@ -294,7 +294,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				if (attackRoll >= m_enemy->Defense()) {
 					int dmg = m_player->AttackDamage(m_rng);
 					m_enemy->Damage(dmg);
-					m_logger->WriteLine("You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + ".");
+					m_logger->WriteLine(m_logger->SuccessColour + "You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + "." + m_logger->ResetColour);
 				}
 				else {
 					m_logger->WriteLine("Your attack missed!");
@@ -305,7 +305,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				if (!m_enemy->IsAlive()) {
 					EndCombat();
 					takenTurn = false;
-					m_logger->WriteLine("You defeated " + m_enemy->GetName() + "! Would you like to continue? Greater dangers and also rewards await you.");
+					m_logger->WriteLine(m_logger->SuccessColour + "You defeated " + m_enemy->GetName() + "! Would you like to continue? Greater dangers and also rewards await you." + m_logger->ResetColour);
 					m_logger->Write("y/n > ");
 					
 					std::string confirm;
@@ -351,10 +351,10 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				// roll under a certain chance to successfully run away
 				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
 				if (roll < 10) {
-					m_logger->WriteLine("You try to get away... but failed!");
+					m_logger->WriteLine("You try to get away..." + m_logger->BadColour + " but failed!" + m_logger->ResetColour);
 				}
 				else {
-					m_logger->WriteLine("You try to get away... and succeeded!");
+					m_logger->WriteLine("You try to get away..." + m_logger->SuccessColour + " and succeeded!" + m_logger->ResetColour);
 					m_logger->WriteLine("The " + m_enemy->GetName() + " takes a final swing at you!");
 					transitionState = GAMESTATE::TOWN;
 				}
@@ -372,17 +372,17 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				if (attackRoll >= m_player->Defense()) {
 					int dmg = m_enemy->AttackDamage(m_rng);
 					m_player->Damage(dmg);
-					m_logger->WriteLine("The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!");
+					m_logger->WriteLine(m_logger->BadColour + "The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!" + m_logger->ResetColour);
 				}
 				else {
-					m_logger->WriteLine("The " + m_enemy->GetName() + "\'s attack missed you.");
+					m_logger->WriteLine(m_logger->SuccessColour + "You dodged the " + m_enemy->GetName() + "\'s attack." + m_logger->ResetColour);
 				}
 				
 				// check if player died
 				if (!m_player->IsAlive()) {
-					m_logger->WriteLine();
+					m_logger->WriteLine(m_logger->BadColour);
 					m_logger->WriteLine("The brave hero, " + m_player->GetName() + ", has fallen to a " + m_enemy->GetName() + "!");
-					m_logger->WriteLine();
+					m_logger->WriteLine(m_logger->ResetColour);
 					m_logger->WriteLine("Thank you for playing! You have been returned to the main menu.");
 					m_logger->WriteLine();
 					transitionState = GAMESTATE::MENU;

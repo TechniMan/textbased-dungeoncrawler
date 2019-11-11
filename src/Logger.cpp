@@ -17,7 +17,7 @@ Logger::Logger() {
 Logger::~Logger() {
 }
 
-const std::string Logger::ResetColour   = White;
+const std::string Logger::ResetColour   = Reset;
 const std::string Logger::BadColour     = Red;
 const std::string Logger::CommandColour = Blue;
 const std::string Logger::ItemColour    = Yellow;
