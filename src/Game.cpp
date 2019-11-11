@@ -25,7 +25,7 @@ void Game::InitialiseCombat() {
 	m_adventureDepth++;
 	unsigned int a = (unsigned int)(floorf((float)m_adventureDepth * 0.7f));
 	std::string kobold("kobold");
-	m_enemy = new Enemy(kobold, AvailableWeapons.at(WEAPONS::DAGGER), a, a, a, 2 * m_adventureDepth, 3 * m_adventureDepth);
+	m_enemy = new Enemy(kobold, 2 * m_adventureDepth);
 	m_enemy->Heal(0);
 
 	m_logger->WriteLine("You've come across a " + m_enemy->GetName() + "!");
@@ -35,8 +35,8 @@ void Game::InitialiseCombat() {
 
 
 void Game::EndCombat() {
-	m_player->Reward(m_enemy->GoldWorth(), m_enemy->ExpWorth());
-	m_logger->WriteLine("You have been rewarded " + std::to_string(m_enemy->GoldWorth()) + "g and " + std::to_string(m_enemy->ExpWorth()) + "exp! Spend them in town.");
+	m_player->Reward(m_enemy->GoldWorth());
+	m_logger->WriteLine("You have been rewarded " + std::to_string(m_enemy->GoldWorth()) + "g! Spend it well in town.");
 }
 
 void Game::InitialiseShop() {
@@ -194,48 +194,6 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			else if (command == "status") {
 				m_logger->WriteLine(m_player->ToString());
-				m_logger->WriteLine("The next level up will cost " + std::to_string(m_player->LevelUpCost()) + "exp.");
-
-				if (mainArg == "help") {
-					m_logger->WriteLine("str: affects your attack damage");
-					m_logger->WriteLine("dex: affects your attack hit chance and dodge chance");
-					m_logger->WriteLine("con: affects your maximum hit points");
-				}
-			}
-
-			else if (command == "levelup") {
-				auto abi = mainArg.substr(0, 3);
-				if (abi == "str")
-				{
-					if (m_player->LevelUp(CREATURE_ABILITIES_STRENGTH)) {
-						m_logger->WriteLine("Your strength score has increased!");
-					}
-					else {
-						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
-					}
-				}
-				else if (abi == "dex") {
-					if (m_player->LevelUp(CREATURE_ABILITIES_DEXTERITY)) {
-						m_logger->WriteLine("Your dexterity score has increased!");
-					}
-					else {
-						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
-					}
-				}
-				else if (abi == "con") {
-					if (m_player->LevelUp(CREATURE_ABILITIES_CONSTITUTION)) {
-						m_logger->WriteLine("Your constitution score has increased!");
-					}
-					else {
-						m_logger->WriteLine("You need at least " + std::to_string(m_player->LevelUpCost()) + "exp to level up an ability.");
-					}
-				}
-				else {
-					m_logger->WriteLine("I'm afraid you don't have a '" + mainArg + "' ability. Try:");
-					m_logger->WriteLine("str: affects your attack damage");
-					m_logger->WriteLine("dex: affects your attack hit chance and dodge chance");
-					m_logger->WriteLine("con: affects your maximum hit points");
-				}
 			}
 
 			else if (command == "inventory") {
@@ -289,15 +247,15 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			if (command == "attack") {
 				// make attack roll
-				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
-				unsigned int attackRoll = roll + m_player->AttackBonus();
-				if (attackRoll >= m_enemy->Defense()) {
-					int dmg = m_player->AttackDamage(m_rng);
+				unsigned int roll = pcg_extras::bounded_rand(m_rng, 100);
+				unsigned int attackRoll = roll;
+				if (m_player->TestAttack(attackRoll)) {
+					int dmg = 1;
 					m_enemy->Damage(dmg);
 					m_logger->WriteLine(m_logger->SuccessColour + "You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + "." + m_logger->ResetColour);
 				}
 				else {
-					m_logger->WriteLine("Your attack missed!");
+					m_logger->WriteLine("You missed! But now your attack skills are improved.");
 				}
 				takenTurn = true;
 
@@ -367,12 +325,13 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 
 			// the enemy takes a turn after the player
 			if (takenTurn) {
-				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
-				unsigned int attackRoll = roll + m_enemy->AttackBonus();
-				if (attackRoll >= m_player->Defense()) {
-					int dmg = m_enemy->AttackDamage(m_rng);
+				unsigned int roll = pcg_extras::bounded_rand(m_rng, 100);
+				unsigned int attackRoll = roll;
+				if (m_player->TestDodge(attackRoll)) {
+					int dmg = 1;
 					m_player->Damage(dmg);
 					m_logger->WriteLine(m_logger->BadColour + "The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!" + m_logger->ResetColour);
+					m_logger->WriteLine("But you'll know how to better dodge that move next time!");
 				}
 				else {
 					m_logger->WriteLine(m_logger->SuccessColour + "You dodged the " + m_enemy->GetName() + "\'s attack." + m_logger->ResetColour);
