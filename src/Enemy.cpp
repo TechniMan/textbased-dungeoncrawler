@@ -1,7 +1,7 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy(std::string& name, int gold)
-    : Creature(name, 10) {
+Enemy::Enemy(std::string& name, int health, int gold)
+    : Creature(name, health) {
     m_gold = gold;
 }
 

@@ -8,7 +8,7 @@ class Enemy : public Creature {
         unsigned int m_gold;
 
     public:
-        Enemy(std::string& name, int gold);
+        Enemy(std::string& name, int health, int gold);
         ~Enemy();
 
         unsigned int GoldWorth() const;
