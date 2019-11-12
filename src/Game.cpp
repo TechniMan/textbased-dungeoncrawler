@@ -329,7 +329,7 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				unsigned int attackRoll = roll;
 				if (m_player->TestDodge(attackRoll)) {
 					int dmg = 1;
-					m_player->Damage(dmg);
+					m_player->TakeDamage(dmg);
 					m_logger->WriteLine(m_logger->BadColour + "The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!" + m_logger->ResetColour);
 					m_logger->WriteLine("But you'll know how to better dodge that move next time!");
 				}

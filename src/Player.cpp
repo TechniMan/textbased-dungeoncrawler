@@ -21,7 +21,12 @@ bool Player::Load(std::string filename, Player& player) {
     // deserialise into {player}
     player.m_baseHp = 10;
     player.m_gold = jIn["gold"];
-    
+    player.m_attackSkill = jIn["attack"];
+    player.m_blockSkill = jIn["block"];
+    player.m_dodgeSkill = jIn["dodge"];
+    player.m_parrySkill = jIn["parry"];
+    player.m_toughnessSkill = jIn["toughness"];
+    player.m_baseHp = player.m_toughnessSkill / 10;
     player.m_currentHp = player.GetMaximumHp();
     player.m_weapon = AvailableWeapons.at(Weapon::GetFromName(jIn["weapon"]));
     player.m_itemInventory = ItemInventory::Deserialise(jIn["inventory"]);
@@ -113,6 +118,7 @@ bool Player::TakeDamage(unsigned int damage) noexcept {
     }
     m_currentHp -= damage;
     m_toughnessSkill++;
+    m_baseHp = m_toughnessSkill / 10;
     return true;
 }
 
@@ -129,7 +135,7 @@ void Player::Reward(unsigned int gold) {
 }
 
 std::string Player::ToString() const {
-    return Creature::ToString()
-            + "\nATK:" + std::to_string(m_attackSkill) + " BLK:" + std::to_string(m_blockSkill) + " DDG:" + std::to_string(m_dodgeSkill) + " PRY:" + std::to_string(m_parrySkill) + " TUF:" + std::to_string(m_toughnessSkill)
-            + "\nGold: " + std::to_string(m_gold) + "g";
+    return Creature::ToString() + " Gold: " + std::to_string(m_gold) + "g"
+            + "\nATK:" + std::to_string(m_attackSkill) + " BLK:" + std::to_string(m_blockSkill) + " DDG:" + std::to_string(m_dodgeSkill)
+            + " PRY:" + std::to_string(m_parrySkill) + " TUF:" + std::to_string(m_toughnessSkill);
 }
