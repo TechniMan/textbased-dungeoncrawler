@@ -32,3 +32,4 @@ $ cmake ..
 $ make
 $ ./textbased-dungeoncrawler
 ```
+[![Run on Repl.it](https://repl.it/badge/github/TechniMan/textbased-dungeoncrawler)](https://repl.it/github/TechniMan/textbased-dungeoncrawler)
