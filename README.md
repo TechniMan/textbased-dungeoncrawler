@@ -1,5 +1,7 @@
 # TextBased-DungeonCrawler
-### A text-based dungeon crawler written with straight-forward C++
+## A text-based dungeon crawler written with straight-forward C++
+
+[![Run on Repl.it](https://repl.it/badge/github/TechniMan/textbased-dungeoncrawler)](https://repl.it/github/TechniMan/textbased-dungeoncrawler)
 
 It has a dumb name because I am bad at names.
 
@@ -30,6 +32,5 @@ $ cd textbased-dungeoncrawler
 $ mkdir build && cd build
 $ cmake ..
 $ make
-$ ./textbased-dungeoncrawler
+$ ./textbased_dungeoncrawler
 ```
-[![Run on Repl.it](https://repl.it/badge/github/TechniMan/textbased-dungeoncrawler)](https://repl.it/github/TechniMan/textbased-dungeoncrawler)

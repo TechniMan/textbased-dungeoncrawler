@@ -1,2 +1,2 @@
-language = "cpp"
-run = "int main()"
+language = "bash"
+run = "mkdir build && cd build && cmake .. && make && cd build && ./textbased_dungeoncrawler"
