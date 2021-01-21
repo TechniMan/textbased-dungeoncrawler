@@ -6,6 +6,12 @@ std::string GAME_SAVES_DIRECTORY = "saves/";
 
 
 
+unsigned int Game::RollDie(void) {
+	return pcg_extras::bounded_rand(m_rng, 20);
+}
+
+
+
 Game::Game() {
 	m_logger = new Logger();
 	m_rng = pcg32();
@@ -24,7 +30,7 @@ Game::~Game() {
 void Game::InitialiseCombat() {
 	m_adventureDepth++;
 	std::string kobold("kobold");
-	m_enemy = new Enemy(kobold, m_adventureDepth, 5);
+	m_enemy = new Enemy(kobold, 5, m_adventureDepth, m_adventureDepth, m_adventureDepth);
 	m_enemy->Heal(0);
 
 	m_logger->WriteLine("You've come across a " + m_enemy->GetName() + "!");
@@ -245,16 +251,17 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			takenTurn = false;
 
 			if (command == "attack") {
-				// make attack roll
-				unsigned int roll = pcg_extras::bounded_rand(m_rng, 100);
-				unsigned int attackRoll = roll;
-				if (m_player->TestAttack(attackRoll)) {
+				unsigned int attackRoll = RollDie();
+				unsigned int dodgeRoll = RollDie();
+				if (attackRoll + m_player->GetAttackBonus() > dodgeRoll + m_enemy->GetDodgeBonus()) {
 					int dmg = 1;
-					m_enemy->Damage(dmg);
+					m_enemy->TakeDamage(dmg);
+					m_enemy->ImproveDodgeSkill();
 					m_logger->WriteLine(m_logger->SuccessColour + "You hit and dealt " + std::to_string(dmg) + " damage to the " + m_enemy->GetName() + "." + m_logger->ResetColour);
 				}
 				else {
 					m_logger->WriteLine("You missed! But now your attack skills are improved.");
+					m_player->ImproveAttackSkill();
 				}
 				takenTurn = true;
 
@@ -263,16 +270,23 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 					EndCombat();
 					takenTurn = false;
 					m_logger->WriteLine(m_logger->SuccessColour + "You defeated " + m_enemy->GetName() + "! Would you like to continue? Greater dangers and also rewards await you." + m_logger->ResetColour);
-					m_logger->Write("y/n > ");
-					
-					std::string confirm;
-					if (std::getline(std::cin, confirm)) {
-						if (confirm.at(0) == 'y' || confirm.at(0) == 'Y') {
-							InitialiseCombat();
-						}
-						else {
-							m_logger->WriteLine("You return to town safely.");
-							transitionState = GAMESTATE::TOWN;
+
+					bool inputAccepted = false;
+					while (!inputAccepted) {
+						m_logger->Write("y/n > ");
+
+						std::string confirm;
+						if (std::getline(std::cin, confirm)) {
+							if (confirm.at(0) == 'y' || confirm.at(0) == 'Y') {
+								m_logger->WriteLine("Onwards!");
+								InitialiseCombat();
+								inputAccepted = true;
+							}
+							else if (confirm.at(0) == 'n' || confirm.at(0) == 'N') {
+								m_logger->WriteLine("You return to town safely.");
+								transitionState = GAMESTATE::TOWN;
+								inputAccepted = true;
+							}
 						}
 					}
 				}
@@ -299,19 +313,21 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 			}
 
 			else if (command == "status") {
-				m_logger->WriteLine(m_player->GetName() + "'s HP: " + m_player->CurrentHealth() + " and " + m_enemy->GetName() + "'s HP: " + m_enemy->CurrentHealth());
+				//m_logger->WriteLine(m_player->GetName() + "'s HP: " + m_player->CurrentHealth() + " and " + m_enemy->GetName() + "'s HP: " + m_enemy->CurrentHealth());
 				m_logger->WriteLine(m_player->ToString());
 				m_logger->WriteLine(m_enemy->ToString());
 			}
 
 			else if (command == "run") {
+				m_logger->Write("You try to get away...");
 				// roll under a certain chance to successfully run away
-				unsigned int roll = pcg_extras::bounded_rand(m_rng, 20);
+				unsigned int roll = RollDie();
+				// 50%
 				if (roll < 10) {
-					m_logger->WriteLine("You try to get away..." + m_logger->BadColour + " but failed!" + m_logger->ResetColour);
+					m_logger->WriteLine(m_logger->BadColour + " but failed!" + m_logger->ResetColour);
 				}
 				else {
-					m_logger->WriteLine("You try to get away..." + m_logger->SuccessColour + " and succeeded!" + m_logger->ResetColour);
+					m_logger->WriteLine(m_logger->SuccessColour + " and succeeded!" + m_logger->ResetColour);
 					m_logger->WriteLine("The " + m_enemy->GetName() + " takes a final swing at you!");
 					transitionState = GAMESTATE::TOWN;
 				}
@@ -322,21 +338,23 @@ bool Game::ProcessCommand(std::string command, std::string mainArg, std::string 
 				m_logger->WriteCommandNotFound(command);
 			}
 
-			// the enemy takes a turn after the player
+			// the enemy takes a turn if the player did something
 			if (takenTurn) {
-				unsigned int roll = pcg_extras::bounded_rand(m_rng, 100);
-				unsigned int attackRoll = roll;
-				// check if player succeeded the dodge roll
-				if (m_player->TestDodge(attackRoll)) {
-					m_logger->WriteLine(m_logger->SuccessColour + "You dodged the " + m_enemy->GetName() + "\'s attack." + m_logger->ResetColour);
-				}
-				else {
+				unsigned int attackRoll = RollDie();
+				unsigned int dodgeRoll = RollDie();
+				// check if the enemy hits the player
+				if (attackRoll + m_enemy->GetAttackBonus() > dodgeRoll + m_player->GetDodgeBonus()) {
 					int dmg = 1;
 					m_player->TakeDamage(dmg);
+					m_player->ImproveDodgeSkill();
 					m_logger->WriteLine(m_logger->BadColour + "The " + m_enemy->GetName() + " hit you for " + std::to_string(dmg) + " damage!" + m_logger->ResetColour);
 					m_logger->WriteLine("But you'll know how to better dodge that move next time!");
 				}
-				
+				else {
+					m_enemy->ImproveAttackSkill();
+					m_logger->WriteLine(m_logger->SuccessColour + "You dodged the " + m_enemy->GetName() + "\'s attack." + m_logger->ResetColour);
+				}
+
 				// check if player died
 				if (!m_player->IsAlive()) {
 					m_logger->WriteLine(m_logger->BadColour);

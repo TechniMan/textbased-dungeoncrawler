@@ -1,14 +1,16 @@
 #include "Creature.hpp"
 #include <cmath>
 
-Creature::Creature(std::string& name, unsigned int baseHp)
-    : m_name(name), m_baseHp(baseHp) {
-    
+Creature::Creature(std::string& name, unsigned int toughness)
+    : m_name(name),
+      m_toughnessSkill(toughness) {
+    m_currentHp = GetMaximumHp();
 }
 
 Creature::Creature(Creature& creature)
-    : m_name(creature.m_name), m_baseHp(creature.m_baseHp) {
-    
+    : m_name(creature.m_name),
+      m_toughnessSkill(creature.m_toughnessSkill) {
+    m_currentHp = GetMaximumHp();
 }
 
 Creature::~Creature() {
@@ -16,7 +18,7 @@ Creature::~Creature() {
 }
 
 unsigned int Creature::GetMaximumHp() const {
-    return m_baseHp;
+    return m_toughnessSkill / 10U;
 }
 
 std::string Creature::GetName() const {
@@ -60,9 +62,37 @@ std::string Creature::CurrentHealth() const {
     return std::to_string(m_currentHp) + " / " + std::to_string(GetMaximumHp());
 }
 
-// return "{name} - Health: {current} / {max} Str: {str} Dex: {dex} Con: {con}"
+// return "{name} - Health: {current} / {max}{insert}\nATK: {atk} DDG: {ddg} TUF: {tuf}"
 std::string Creature::ToString() const {
-    return m_name + " - Health: " + CurrentHealth();
+    return m_name + " - Health: " + CurrentHealth()
+        + "\nATK:" + std::to_string(m_attackSkill) + " DDG:" + std::to_string(m_dodgeSkill)
+        + " TUF:" + std::to_string(m_toughnessSkill);
+}
+
+uint Creature::GetAttackBonus(void) const noexcept {
+    return m_attackSkill / 10U;
+}
+
+uint Creature::GetDodgeBonus(void) const noexcept {
+    return m_dodgeSkill / 10U;
+}
+
+void Creature::ImproveAttackSkill(void) noexcept {
+    m_attackSkill++;
+}
+
+void Creature::ImproveDodgeSkill(void) noexcept {
+    m_dodgeSkill++;
+}
+
+bool Creature::TakeDamage(unsigned int damage) noexcept {
+    if (damage >= m_currentHp) {
+        m_currentHp = 0;
+        return false;
+    }
+    m_currentHp -= damage;
+    m_toughnessSkill++;
+    return true;
 }
 
 

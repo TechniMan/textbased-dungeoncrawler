@@ -13,11 +13,14 @@ class Creature {
 protected:
     // creature's name
     std::string m_name;
-    // creature's base hit points
-    unsigned int m_baseHp;
     // current hit point value
     unsigned int m_currentHp;
-    
+
+    // attributes
+    unsigned int m_attackSkill;
+    unsigned int m_dodgeSkill;
+    unsigned int m_toughnessSkill;
+
     // derive maximum hp from stats
     unsigned int GetMaximumHp() const;
 
@@ -45,6 +48,13 @@ public:
     std::string CurrentHealth() const;
     // return "{name} - Health: {current} / {max} Str: {str} Dex: {dex} Con: {con}"
     virtual std::string ToString() const;
+
+    uint GetAttackBonus() const noexcept;
+    uint GetDodgeBonus() const noexcept;
+    void ImproveAttackSkill() noexcept;
+    void ImproveDodgeSkill() noexcept;
+    // true: Still alive. false: Not alive; game over.
+    bool TakeDamage(unsigned int damage) noexcept;
 
 
     /// Inventory

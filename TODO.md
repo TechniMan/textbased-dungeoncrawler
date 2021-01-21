@@ -16,7 +16,9 @@
 * add extra locations to adventure to, with different sets of creatures
 * crafting of armour/weapons in town
 * add a bounty board/minor quests
+* randomise some lines (e.g. when continuing to next combat - randomly select variants of "Onwards!")
 ## Tech
+* Add an update-checker! Just check local version against a json file in repo and inform user if a new version is available
 * rewrite commands system to use reified method calls like [this (GPG)](http://gameprogrammingpatterns.com/command.html) and [this (MSDN)](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.commandlineutils.commandlineapplication?view=aspnetcore-1.1) (this will make 'help' command easier as we could just find commands applied to current state instead of manual)
 * also try to improve state transitions (e.g. when the state changes to town from wilderness, show the same line about "you've come back to town" or whenever you go to the menu, always show "this is the menu" or something)
 * add a system to read monsters from file, for easy configurability by eager players

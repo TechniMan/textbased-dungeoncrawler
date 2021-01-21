@@ -14,6 +14,7 @@ class Game {
     private:
         Logger* m_logger = nullptr;
         pcg32 m_rng;
+        unsigned int RollDie(void);
 
         GAMESTATE m_gameState = GAMESTATE::MENU;
         unsigned int m_adventureDepth = 0;
